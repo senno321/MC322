@@ -40,7 +40,7 @@ public class Usuario {
         this.email = email;
     }
 
-    public List<Materia> getMateriais() {
+    public List<Materia> getMaterias() {
         return this.materias;
     }
 
