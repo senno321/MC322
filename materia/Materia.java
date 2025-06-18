@@ -3,13 +3,13 @@ public class Materia {
     private String nome;
     private String professor;
     private int faltas;
-    private final int limiteFaltas;
+    private final int creditos;
 
-    public Materia(String nome, String professor, int limiteFaltas) {
+    public Materia(String nome, String professor, int creditos) {
         this.nome = nome;
         this.professor = professor;
         this.faltas = 0;
-        this.limiteFaltas = limiteFaltas; 
+        this.creditos = creditos; 
     }
 
     public String getNome() {
@@ -28,8 +28,12 @@ public class Materia {
         this.faltas = faltas;
     }
 
+    public int getCreditos() {
+	return this.creditos;
+    }
+
     public int getLimiteFaltas() {
-        return this.limiteFaltas;
+        return 2 * this.creditos - 1;
     }
 
     // caso precise do da matéria em texto

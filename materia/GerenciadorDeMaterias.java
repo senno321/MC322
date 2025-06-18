@@ -77,9 +77,8 @@ public class GerenciadorDeMaterias {
                 String nome = nomes.get(i);
                 String professor = professores.get(i);
                 int credito = creditos.get(i);
-                int limiteFaltas = 2 * credito - 1; 
 
-                Materia novaMateria = new Materia(nome, professor, limiteFaltas);
+                Materia novaMateria = new Materia(nome, professor, credito);
 
                 catalogoMaterias.put(codigo, novaMateria);
             }
