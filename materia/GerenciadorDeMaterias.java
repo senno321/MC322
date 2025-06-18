@@ -1,3 +1,4 @@
+package materia;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,10 +16,10 @@ public class GerenciadorDeMaterias {
     }
 
     private void carregarMateriasDosArquivos() {
-        String caminhoArquivoCodigos = "Código_Matérias.txt";
-        String caminhoArquivoNomes = "Nome_Matérias.txt";
-        String caminhoArquivoProfessores = "Nome_Professores.txt";
-        String caminhoArquivoCreditos = "Crédito_Matérias.txt";
+        String caminhoArquivoCodigos = "MC322/txt/Código_Matérias.txt";
+        String caminhoArquivoNomes = "MC322/txt/Nome_Matérias.txt";
+        String caminhoArquivoProfessores = "MC322/txt/Nome_Professores.txt";
+        String caminhoArquivoCreditos = "MC322/txt/Crédito_Matérias.txt";
 
         List<String> codigos = new ArrayList<>();
         List<String> nomes = new ArrayList<>();

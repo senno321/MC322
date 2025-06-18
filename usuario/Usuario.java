@@ -1,3 +1,5 @@
+package usuario;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -6,12 +8,15 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import evento.Evento;
+import materia.Materia;
+
 public class Usuario {
     private String nome;
     private String email;
-    private String hashSenha;
     private List<Materia> materias = new ArrayList<>();
     private List<Evento> eventos = new ArrayList<>();
+    private String hashSenha;
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
@@ -35,10 +40,18 @@ public class Usuario {
         this.email = email;
     }
 
+    public List<Materia> getMateriais() {
+        return this.materias;
+    }
+
+    public List<Evento> getEventos() {
+        return this.eventos;
+    }
+
     public void setSenha(String senhaAntiga, String senhaNova) {
         if (verificarSenha(senhaAntiga))
             this.hashSenha = gerarHash(senhaNova);
-            
+
         else {
             System.out.println("Senha errada.");
         }
@@ -62,8 +75,16 @@ public class Usuario {
         this.eventos.add(evento);
     }
 
+    public void removerEvento(Evento evento) {
+        this.eventos.remove(evento);
+    }
+
     public void adicionarMateria(Materia materia) {
         this.materias.add(materia);
+    }
+
+    public void removerMateria(Materia materia) {
+        this.materias.remove(materia);
     }
 
     public void visualizarCalendario(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
