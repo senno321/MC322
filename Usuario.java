@@ -1,12 +1,22 @@
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+
 public class Usuario {
     private String nome;
     private String email;
-    private String senha;
+    private String hashSenha;
+    private List<Materia> materias = new ArrayList<>();
+    private List<Evento> eventos = new ArrayList<>();
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
+        this.hashSenha = gerarHash(senha);
     }
 
     public String getNome() {
@@ -25,26 +35,60 @@ public class Usuario {
         this.email = email;
     }
 
-    /* Mudar o get senha por algo mais robusto.
-     * Usar Hash.
-     */
-    public String getSenha() {
-        return this.senha;
+    public void setSenha(String senhaAntiga, String senhaNova) {
+        if (verificarSenha(senhaAntiga))
+            this.hashSenha = gerarHash(senhaNova);
+            
+        else {
+            System.out.println("Senha errada.");
+        }
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public boolean verificarSenha(String tentativa) {
+        return gerarHash(tentativa).equals(this.hashSenha);
     }
 
-    public void adicionarEvento() {
-
+    private String gerarHash(String senha) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(senha.getBytes());
+            return Base64.getEncoder().encodeToString(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Erro ao gerar hash da senha", e);
+        }
     }
 
-    public void adicionarMateria() {
-
+    public void adicionarEvento(Evento evento) {
+        this.eventos.add(evento);
     }
 
-    public void visualizarCalendario() {
-        
+    public void adicionarMateria(Materia materia) {
+        this.materias.add(materia);
+    }
+
+    public void visualizarCalendario(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
+
+        if (dataHoraInicio == null || dataHoraFim == null) {
+            throw new IllegalArgumentException("Datas não podem ser nulas.");
+        }
+
+        if (dataHoraInicio.isAfter(dataHoraFim)) {
+            throw new IllegalArgumentException("Data de início não pode ser depois da data de fim.");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        for (Evento e : eventos) {
+            LocalDateTime eventoInicio = e.getDataHoraInicio();
+
+            if ((!eventoInicio.isBefore(dataHoraInicio)) && (!eventoInicio.isAfter(dataHoraFim))) {
+                System.out.println(" - " + e.getNome() + " às " + eventoInicio.format(formatter));
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{nome='" + nome + "', email='" + email + "'}";
     }
 }
