@@ -18,10 +18,12 @@ public class GerenciadorDeMaterias {
         String caminhoArquivoCodigos = "Código_Matérias.txt";
         String caminhoArquivoNomes = "Nome_Matérias.txt";
         String caminhoArquivoProfessores = "Nome_Professores.txt";
+        String caminhoArquivoCreditos = "Crédito_Matérias.txt";
 
         List<String> codigos = new ArrayList<>();
         List<String> nomes = new ArrayList<>();
         List<String> professores = new ArrayList<>();
+        List<Integer> creditos = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoCodigos))) {
             String linha;
@@ -56,14 +58,25 @@ public class GerenciadorDeMaterias {
             System.err.println("Verifique se '" + caminhoArquivoProfessores + "' está no local correto.");
         }
 
+        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoCreditos))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                codigos.add(linha);
+            }
+        } 
+        catch (IOException e) {
+            System.err.println("Erro ao ler o arquivo de creditos: " + e.getMessage());
+            System.err.println("Verifique se '" + caminhoArquivoCreditos + "' está no local correto.");
+        }
+
         if (codigos.size() == nomes.size() && codigos.size() == professores.size()) {
             for (int i = 0; i < codigos.size(); i++) {
                 
                 String codigo = codigos.get(i);
                 String nome = nomes.get(i);
                 String professor = professores.get(i);
-
-                int limiteFaltas = 10;
+                int credito = creditos.get(i);
+                int limiteFaltas = 2 * credito - 1; 
 
                 Materia novaMateria = new Materia(nome, professor, limiteFaltas);
 
@@ -74,7 +87,7 @@ public class GerenciadorDeMaterias {
 
         } 
         else {
-            System.err.println("Erro: O número de linhas nos arquivos de códigos, nomes ou professores não corresponde!");
+            System.err.println("Erro: O número de linhas nos arquivos de códigos, nomes, professores ou créditos");
         }
 
     }
