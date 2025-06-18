@@ -8,7 +8,7 @@ public class Materia {
         this.nome = nome;
         this.professor = professor;
         this.faltas = 0;
-        this.limiteFaltas = limiteFaltas;
+        this.limiteFaltas = limiteFaltas; 
     }
 
     public String getNome() {
@@ -29,5 +29,11 @@ public class Materia {
 
     public int getLimiteFaltas() {
         return this.limiteFaltas;
+    }
+
+    // caso precise do da matéria em texto
+    @Override
+    public String toString() {
+        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/" + limiteFaltas + "]";
     }
 }

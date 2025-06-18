@@ -1,0 +1,233 @@
+Formação para mediação em oficinas de matemática para olimpíadas I
+Matemática IV
+Matemática Básica
+Seminários Sobre o Ensino de Matemática
+Matemática Elementar
+Cálculo I
+Geometria Analítica e Vetores
+Fundamentos da Matemática
+Cálculo II
+Matemática Discreta
+Análise de Livros e Materiais Didáticos de Matemática
+Cálculo III
+Álgebra Linear
+Grupos e Representações
+Topologia Geral
+Equações Diferenciais Ordinárias
+Análise I
+Análise II
+Geometria Espacial
+Currículo e Didática da Matemática: Teoria e Prática
+Análise no R(n)
+Tópicos Distinguidos de Matemática III
+Tópicos Distinguidos de Matemática IV
+Matemática do Ensino Médio para Professores I
+Cultura Matemática I
+Cultura Matemática II
+Cultura Matemática III
+Atividade de Cultura Matemática I
+Atividades de Extensão I
+Atividades Extensão II
+Atividades Extensão III
+Atividades Extensão IV
+Atividades Extensão V
+Atividades Extensão VI
+Atividades Extensão VII
+Atividades Extensão VIII
+Atividades Extensão IX
+Estágio Supervisionado I
+Estágio Supervisionado II
+Iniciação Científica I
+Iniciação Científica II
+Noções de Estatística
+Laboratório de Estatística
+Linguagem R
+Estatística Descritiva
+Introdução à Estatística Vital
+Probabilidade I
+Probabilidade II
+Inferência
+Introdução aos Modelos Probabilísticos
+Estatística para Experimentalistas
+Séries Temporais
+Análise de Regressão
+Planejamento e Pesquisa
+Iniciação Científica I
+Inferência Bayesiana
+Consultoria Estatística I
+Análise de Dados Discretos
+Demografia
+Consultoria Estatística II
+Estágio em Empresa I
+Estágio em Empresa II
+Atividades de Extensão I
+Atividades de Extensão II
+Atividades de Extensão III
+Atividades de Extensão IV
+Atividades de Extensão V
+Atividades de Extensão VI
+Atividades de Extensão VII
+Atividades de Extensão VIII
+Análise de Regressão II
+Inferência Estatística para Dados de Alta Dimensão
+Estatística e Probabilidade I
+Construção de oficinas de matemática para olimpíadas I
+Elementos de Cálculo
+Complementos de Matemática
+Cálculo Numérico
+Introdução à Matemática Computacional
+Matemática Aplicada para Biologia
+Algoritmos de otimização convexa
+Modelagem Matemática
+Análise Numérica I
+Laboratório de Computação Científica
+Fluxos em Redes
+Métodos de Matemática Aplicada I
+Introdução à Teoria Fuzzy
+Estrutura Matemática do Eletromagnetismo
+Análise Numérica III
+Métodos de Matemática Aplicada III
+Projeto Supervisionado
+Projeto de Extensão Supervisonado I
+Projeto Supervisionado II
+Projeto de Extensão Supervisonado II
+Atividades de Extensão I
+Atividades de Extensão II
+Atividades de Extensão III
+Atividades de Extensão IV
+Atividades de Extensão V
+Atividades de Extensão VI
+Atividades de Extensão VII
+Atividades de Extensão VIII
+Tópicos Especiais de Matemática Aplicada
+Tópicos Especiais de Matemática Aplicada V
+Tópicos Especiais de Matemática Aplicada VIII
+Tópicos em Matemática Aplicada II
+Análise Aplicada
+Matrizes
+Estágio Supervisionado em Ciência da Computação
+Estágio Supervisionado em Ciência da Computação II
+Projeto Final de Graduação
+Estudo Dirigido
+Estudo Dirigido II
+Seminários sobre Computação e Tecnologia
+Estágio de Iniciação Científica I
+Estágio de Iniciação Científica II
+Monitoria
+Monitoria II
+Algoritmos e Programação de Computadores
+Estruturas de Dados
+Programação Orientada a Objetos
+Fundamentos Matemáticos da Computação
+Organização Básica de Computadores e Linguagem de Montagem
+Engenharia de Software
+Projeto e Análise de Algoritmos I
+Sistemas Operacionais
+Desafios de Programação I
+Bancos de Dados: Teoria e Prática
+Projeto e Análise de Algoritmos II
+Laboratório de Circuitos Digitais
+Verificação, Validação e Testes de Software
+Engenharia de Software
+Sistemas Distribuídos
+Desafios de Programação III
+Projeto de Sistemas Computacionais
+Algoritmos de Aproximação
+Construção de Interfaces Homem-Computador
+Programação Linear Inteira
+Redes de Computadores
+Programação de Redes de Computadores
+Projeto em Sistemas de Programação
+Projeto em Computação com Extensão
+Projeto em Sistemas de Computação
+Teoria e Aplicações de Grafos
+Aprendizado de Máquina
+Introdução à Criptografia
+Introdução à Inteligência Artificial
+Tópicos em Teoria da Computação I
+Introdução ao Processamento de Imagem Digital
+Projeto e Construção de Compiladores
+Tópicos em Engenharia de Software I
+Tópicos em Engenharia de Computação
+Computação Gráfica
+Tópicos em Redes de Computadores I
+Tópicos em Computação Distribuída
+Introdução à Programação Paralela
+Tópicos em Arquitetura e Hardware I
+Atividades de extensão I
+Atividades de extensão II
+Atividades de extensão III
+Atividades de extensão IV
+Atividades de extensão V
+Atividades de extensão VI
+Atividades de extensão VII
+Atividades de extensão VIII
+Projeto Integrador Interdisciplinar de Extensão III
+Oficina de Informática Básica I
+Antropoceno: Desafios da Complexidade Ambiental
+Introdução à Física
+Tópicos de Física Aplicada III
+Tópicos de Astronomia e Astrofísica VI
+Tópicos de Física Clássica VI
+Física da Fala e Audição
+Fundamentos de Física para a Biologia
+Física (Biologia)
+Física Geral I
+Introdução à Física Experimental I
+Física Geral II
+Óptica Aplicada
+Introdução à Física Experimental II
+Mecânica Geral I
+Termodinâmica
+Física Geral III
+Física Experimental III
+Introdução à Teoria de Informação: Aspectos Clássicos e Quânticos
+Introdução à Física Experimental III
+Mecânica Geral II
+Física Geral IV
+Lasers e Aplicações
+Estrutura de Matéria II
+Eletromagnetismo I
+Métodos Matemáticos da Física I
+Instrumentação I
+Métodos da Física Experimental I
+Fontes Alternativas de Energia
+Radiação: Interação e Detecção II
+Estrutura da Matéria
+Iniciação Científica I
+Física Estatística
+Tópicos de Ensino de Física I
+Métodos de Computação Científica I
+Instrumentação II
+Métodos da Física Experimental II
+Iniciação Científica II
+Tópicos de Ensino de Física II
+Métodos da Física Experimental III
+Engenharia de Materiais Estruturados e Dispositivos
+Imagens Médicas com Radiação Não-Ionizantes
+Radiobiologia e Radioproteção
+Mecânica Quântica II
+Métodos de Física Experimental VII
+Métodos da Física Experimental VI
+Projeto de Curso em Engenharia Física
+Monografia
+Monografia em Ensino de Física I
+Estágio Supervisionado I
+Estágio Supervisionado II
+Estágio em Engenharia Física
+Iniciação à Prática de Ensino I
+Iniciação à Prática de Ensino II
+Iniciação à Prática de Ensino III
+Projetos Integrados do Ensino de Física
+Práticas de Ensino de Física
+Seminários sobre a Profissão
+Práticas de Engenharia Física I
+Atividades Científico - Culturais I
+Práticas de Engenharia Física II
+Atividades Científico - Culturais III
+Atividades Científico - Culturais VI
+Projetos Integrados em Engenharia Física III
+Práticas em Empresa Júnior
+Atividades de Extensão A3
+Tópicos de Extensão III
+Tópicos de Extensão VII
