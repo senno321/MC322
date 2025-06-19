@@ -1,4 +1,4 @@
-package evento;
+package app.src.main.java.mc322.evento;
 import java.time.LocalDateTime;
 
 public class Evento {

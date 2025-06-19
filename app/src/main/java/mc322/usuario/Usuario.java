@@ -1,4 +1,4 @@
-package usuario;
+package app.src.main.java.mc322.usuario;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import evento.Evento;
-import materia.Materia;
+import app.src.main.java.mc322.evento.Evento;
+import app.src.main.java.mc322.materia.Materia;
 
 public class Usuario {
     private String nome;

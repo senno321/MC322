@@ -1,4 +1,5 @@
-package materia;
+package app.src.main.java.mc322.materia;
+
 public class Materia {
     private String nome;
     private String professor;
@@ -39,6 +40,6 @@ public class Materia {
     // caso precise do da matéria em texto
     @Override
     public String toString() {
-        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/" + limiteFaltas + "]";
+        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/" + this.getLimiteFaltas() + "]";
     }
 }

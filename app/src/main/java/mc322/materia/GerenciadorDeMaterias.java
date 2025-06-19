@@ -1,4 +1,4 @@
-package materia;
+package app.src.main.java.mc322.materia;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
