@@ -1,6 +1,6 @@
-package app.src.main.java.mc322.evento;
+package mc322.evento;
 
-import app.src.main.java.mc322.materia.Materia;
+import mc322.materia.Materia;
 
 public class EventoProva extends CaracteristicaEvento {
     private Materia materia;

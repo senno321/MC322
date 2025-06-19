@@ -1,8 +1,8 @@
-package app.src.main.java.mc322.evento;
+package mc322.evento;
 import java.time.LocalDateTime;
 
-import app.src.main.java.mc322.materia.Materia;
-import app.src.main.java.mc322.usuario.Usuario;
+import mc322.materia.Materia;
+import mc322.usuario.Usuario;
 
 public class GerenciadorDeEventos {
 

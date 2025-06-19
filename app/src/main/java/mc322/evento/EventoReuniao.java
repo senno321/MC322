@@ -1,4 +1,4 @@
-package app.src.main.java.mc322.evento;
+package mc322.evento;
 
 public class EventoReuniao extends CaracteristicaEvento {
     private String participantes;

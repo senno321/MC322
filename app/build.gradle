@@ -16,12 +16,11 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
+    implementation 'org.mongodb:mongodb-driver-sync:4.10.2'
+
+    //Testes
     testImplementation libs.junit.jupiter
-
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
     implementation libs.guava
 }
 
@@ -34,7 +33,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'app.src.main.java.mc322.App'
+    mainClass = 'mc322.App'
 }
 
 tasks.named('test') {

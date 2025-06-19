@@ -1,4 +1,4 @@
-package app.src.main.java.mc322.materia;
+package mc322.materia;
 
 public class Materia {
     private String nome;
