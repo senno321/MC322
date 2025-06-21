@@ -1,16 +1,21 @@
 package mc322.materia;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Materia {
     private String nome;
     private String professor;
     private int faltas;
+    private List<Atividade> listaAtividades;
     private final int creditos;
 
     public Materia(String nome, String professor, int creditos) {
         this.nome = nome;
         this.professor = professor;
         this.faltas = 0;
-        this.creditos = creditos; 
+        this.creditos = creditos;
+        listaAtividades = new ArrayList<Atividade>();
     }
 
     public String getNome() {
@@ -30,11 +35,19 @@ public class Materia {
     }
 
     public int getCreditos() {
-	return this.creditos;
+	    return this.creditos;
     }
 
     public int getLimiteFaltas() {
         return 2 * this.creditos - 1;
+    }
+
+    public List getListaAtividades() {
+        return listaAtividades;
+    }
+
+    public void adicionaAtividade(Atividade atividade) {
+        listaAtividades.add(atividade);
     }
 
     // caso precise do da matéria em texto
