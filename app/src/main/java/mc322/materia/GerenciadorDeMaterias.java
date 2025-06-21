@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mc322.usuario.Usuario;
+
 public class GerenciadorDeMaterias {
     public Map<String, Materia> catalogoMaterias; 
 
@@ -99,5 +101,10 @@ public class GerenciadorDeMaterias {
     // opcional - caso precise acessar o catálogo 
     public Map<String, Materia> getCatalogoMaterias() {
         return catalogoMaterias;
+    }
+
+    public void criarMateria(Usuario usuario, String nome, String professor, int creditos) {
+        Materia materia = new Materia(nome, professor, creditos);
+        usuario.adicionarMateria(materia);
     }
 }

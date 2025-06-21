@@ -3,8 +3,6 @@
  */
 package mc322;
 
-import java.time.LocalDateTime;
-
 // Ensure this import matches the actual package of GerenciadorDeEventos
 import mc322.evento.GerenciadorDeEventos;
 import mc322.usuario.Usuario;
