@@ -9,6 +9,8 @@ import java.util.Base64;
 import java.util.List;
 
 import mc322.evento.Evento;
+import mc322.evento.GerenciadorDeEventos;
+import mc322.materia.Atividade;
 import mc322.materia.Materia;
 
 public class Usuario {
@@ -85,6 +87,17 @@ public class Usuario {
 
     public void removerMateria(Materia materia) {
         this.materias.remove(materia);
+    }
+
+    public void criarAtividade(String nomeMateria, String nome) {
+        for (Materia m : this.materias) {
+            if (m.getNome().equalsIgnoreCase(nomeMateria)) {
+                Atividade atividade = new Atividade(nome);
+                m.adicionaAtividade(atividade);
+            }
+        }
+        GerenciadorDeEventos gerenciador = new GerenciadorDeEventos();
+        
     }
 
     public void visualizarCalendario(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {

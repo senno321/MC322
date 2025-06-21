@@ -15,7 +15,7 @@ public class Materia {
         this.professor = professor;
         this.faltas = 0;
         this.creditos = creditos;
-        listaAtividades = new ArrayList<Atividade>();
+        listaAtividades = new ArrayList<>();
     }
 
     public String getNome() {
@@ -42,7 +42,7 @@ public class Materia {
         return 2 * this.creditos - 1;
     }
 
-    public List getListaAtividades() {
+    public List<Atividade> getListaAtividades() {
         return listaAtividades;
     }
 

@@ -4,9 +4,9 @@ public class Atividade {
     private String nome;
     private boolean completa;
 
-    public Atividade(String nome, boolean completa) {
+    public Atividade(String nome) {
         this.nome = nome;
-        this.completa = completa;
+        this.completa = false;
     }
 
     public String getNome() {
