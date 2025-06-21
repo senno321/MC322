@@ -1,4 +1,5 @@
 package mc322.materia;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.Map;
 import mc322.usuario.Usuario;
 
 public class GerenciadorDeMaterias {
-    public Map<String, Materia> catalogoMaterias; 
+    public Map<String, Materia> catalogoMaterias;
 
     public GerenciadorDeMaterias() {
         catalogoMaterias = new HashMap<>();
@@ -33,8 +34,7 @@ public class GerenciadorDeMaterias {
             while ((linha = br.readLine()) != null) {
                 codigos.add(linha);
             }
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de códigos: " + e.getMessage());
             System.err.println("Verifique se '" + caminhoArquivoCodigos + "' está no local correto.");
         }
@@ -44,8 +44,7 @@ public class GerenciadorDeMaterias {
             while ((linha = br.readLine()) != null) {
                 nomes.add(linha);
             }
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de nomes: " + e.getMessage());
             System.err.println("Verifique se '" + caminhoArquivoNomes + "' está no local correto.");
         }
@@ -55,8 +54,7 @@ public class GerenciadorDeMaterias {
             while ((linha = br.readLine()) != null) {
                 professores.add(linha);
             }
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de professores: " + e.getMessage());
             System.err.println("Verifique se '" + caminhoArquivoProfessores + "' está no local correto.");
         }
@@ -66,15 +64,14 @@ public class GerenciadorDeMaterias {
             while ((linha = br.readLine()) != null) {
                 codigos.add(linha);
             }
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo de creditos: " + e.getMessage());
             System.err.println("Verifique se '" + caminhoArquivoCreditos + "' está no local correto.");
         }
 
         if (codigos.size() == nomes.size() && codigos.size() == professores.size()) {
             for (int i = 0; i < codigos.size(); i++) {
-                
+
                 String codigo = codigos.get(i);
                 String nome = nomes.get(i);
                 String professor = professores.get(i);
@@ -87,8 +84,7 @@ public class GerenciadorDeMaterias {
 
             System.out.println("Total de " + catalogoMaterias.size() + " matérias carregadas no catálogo.");
 
-        } 
-        else {
+        } else {
             System.err.println("Erro: O número de linhas nos arquivos de códigos, nomes, professores ou créditos");
         }
 
@@ -98,13 +94,18 @@ public class GerenciadorDeMaterias {
         return catalogoMaterias.get(codigo);
     }
 
-    // opcional - caso precise acessar o catálogo 
+    // opcional - caso precise acessar o catálogo
     public Map<String, Materia> getCatalogoMaterias() {
         return catalogoMaterias;
     }
 
-    public void criarMateria(Usuario usuario, String nome, String professor, int creditos) {
-        Materia materia = new Materia(nome, professor, creditos);
-        usuario.adicionarMateria(materia);
+    public void criarMateria(Usuario usuario, String codigoMateria) {
+        Materia materia = catalogoMaterias.get(codigoMateria);
+
+        if (materia != null) {
+            usuario.adicionarMateria(materia);
+            System.out.println("Matéria adicionada ao usuário: " + materia.getNome());
+        } else
+            System.err.println("Código não encontrado no catálogo: " + codigoMateria);
     }
 }
