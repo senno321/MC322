@@ -1,0 +1,59 @@
+/* Estilos personalizados para a Agenda de Estudante */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa; /* Cor de fundo suave */
+}
+
+/* Efeito de transição suave para o menu lateral */
+#sideMenu {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Classes para controlar a visibilidade do menu */
+.menu-open {
+    transform: translateX(0);
+}
+.menu-closed {
+    transform: translateX(-100%);
+}
+
+/* Efeito de sombra e escala para botões interativos */
+.btn-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo para os dias do calendário */
+.day {
+    transition: background-color 0.2s;
+}
+.day:hover {
+    background-color: #e9ecef; /* Realce ao passar o mouse */
+}
+
+/* Estilo para a pílula de evento dentro do dia */
+.event {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    cursor: pointer;
+}
+
+/* Animação para o modal aparecer suavemente */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

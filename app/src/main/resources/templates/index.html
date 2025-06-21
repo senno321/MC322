@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Estudante</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        #sideMenu {
+            transition: transform 0.3s ease-in-out;
+        }
+        .menu-open { transform: translateX(0); }
+        .menu-closed { transform: translateX(-100%); }
+        .btn-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .day { transition: background-color 0.2s; }
+        .day:hover { background-color: #e9ecef; }
+        .event {
+            font-size: 0.7rem;
+            padding: 2px 4px;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Estrutura principal da aplicação -->
+    <div id="app" class="relative min-h-screen">
+
+        <!-- Menu Lateral -->
+        <aside id="sideMenu" class="fixed top-0 left-0 h-full w-80 bg-white shadow-lg p-6 z-30 menu-closed overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Matérias</h2>
+                <button id="closeMenuBtn" class="text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="subjectList" class="space-y-4">
+                <!-- Cards de matéria injetados aqui -->
+            </div>
+        </aside>
+        <div id="menuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"></div>
+
+        <!-- Conteúdo Principal -->
+        <main id="mainContent" class="p-4 sm:p-6 lg:p-8 transition-transform duration-300">
+            <header class="flex justify-between items-center mb-6">
+                <button id="menuBtn" class="text-xl lg:text-2xl font-bold text-gray-700 p-2 rounded-full hover:bg-gray-200">
+                     <i class="fas fa-bars"></i>
+                </button>
+                <div class="text-center">
+                    <h1 id="monthDisplay" class="text-2xl sm:text-3xl font-bold text-gray-800"></h1>
+                    <p class="text-gray-500">Clique em um dia para ver ou adicionar eventos</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="backButton" class="px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"><i class="fas fa-chevron-left"></i></button>
+                    <button id="nextButton" class="px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </header>
+
+            <div id="weekdays" class="grid grid-cols-7 gap-2 text-center font-semibold text-gray-600 mb-2">
+                <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+            </div>
+            <div id="calendar" class="grid grid-cols-7 gap-2">
+                <!-- Dias do calendário injetados aqui -->
+            </div>
+        </main>
+
+        <!-- Botão Flutuante -->
+        <button id="addEventBtn" class="fixed bottom-8 right-8 bg-blue-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-3xl btn-hover">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- Modal para Adicionar/Editar Evento -->
+        <div id="newEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 hidden">
+            <div class="bg-white rounded-lg shadow-xl p-8 w-11/12 md:w-1/2 lg:w-1/3 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Novo Evento</h2>
+                <form id="eventForm" class="space-y-4">
+                    <input type="hidden" id="eventIdInput">
+                    <input type="text" id="eventTitleInput" placeholder="Título do Evento" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" required>
+                    <input type="text" id="eventLocationInput" placeholder="Local" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+                    <input type="date" id="eventDateInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" required>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="time" id="eventStartTimeInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" required>
+                        <input type="number" id="eventDurationInput" placeholder="Duração (min)" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                         <button type="button" id="deleteButton" class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition hidden">Excluir</button>
+                        <div>
+                           <button type="button" id="cancelButton" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Cancelar</button>
+                           <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Salvar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- DADOS DA APLICAÇÃO ---
+            // Em uma aplicação real, estes dados viriam de uma chamada de API para o backend Java.
+            // Aqui, simulamos isso pré-carregando os dados dos seus arquivos .txt.
+            const subjectsData = {
+                codes: ["MA013","MA044","MA091","MA104","MA105","MA111","MA141","MA148","MA211","MA220","MA225","MA311","MA327","MA446","MA453","MA456","MA502","MA602","MA621","MA705","MA720","MA726","MA727","MA740","MA811","MA812","MA813","MA814","MA881","MA882","MA883","MA884","MA885","MA886","MA887","MA888","MA889","MA901","MA902","MA903","MA904","ME110","ME111","ME115","ME173","ME176","ME210","ME310","ME322","ME323","ME414","ME607","ME613","ME623","ME630","ME705","ME712","ME714","ME721","ME812","ME820","ME821","ME851","ME852","ME853","ME854","ME855","ME856","ME857","ME858","ME861","ME905","ME951","MS013","MS123","MS149","MS211","MS213","MS380","MS413","MS480","MS512","MS513","MS529","MS550","MS580","MS620","MS712","MS750","MS777","MS778","MS877","MS878","MS891","MS892","MS893","MS894","MS895","MS896","MS897","MS898","MS901","MS905","MS908","MS932","MS991","MS992","MC019","MC020","MC030","MC032","MC033","MC039","MC040","MC041","MC050","MC051","MC102","MC202","MC322","MC358","MC404","MC426","MC458","MC504","MC521","MC536","MC558","MC613","MC646","MC656","MC714","MC721","MC732","MC748","MC750","MC798","MC832","MC833","MC853","MC854","MC855","MC878","MC886","MC889","MC906","MC918","MC920","MC921","MC926","MC934","MC937","MC953","MC964","MC970","MC972","MX011","MX012","MX013","MX014","MX021","MX022","MX061","MX062","MX853","VI104","AM088","F008","F013","F036","F076","F105","F106","F107","F128","F159","F228","F249","F259","F315","F320","F328","F329","F349","F359","F415","F428","F449","F489","F502","F520","F530","F540","F549","F551","F589","F590","F604","F609","F625","F630","F640","F690","F709","F740","F749","F751","F758","F789","F838","F839","F894","F896","F897","F901","F902","F949","FL110","FL210","FL310","FL701","FL801","FM003","FM110","FM201","FM210","FM401","FM701","FM849","FX009","FX013","FX113","FX117"],
+                names: ["Formação para mediação em oficinas de matemática para olimpíadas I","Matemática IV","Matemática Básica","Seminários Sobre o Ensino de Matemática","Matemática Elementar","Cálculo I","Geometria Analítica e Vetores","Fundamentos da Matemática","Cálculo II","Matemática Discreta","Análise de Livros e Materiais Didáticos de Matemática","Cálculo III","Álgebra Linear","Grupos e Representações","Topologia Geral","Equações Diferenciais Ordinárias","Análise I","Análise II","Geometria Espacial","Currículo e Didática da Matemática: Teoria e Prática","Análise no R(n)","Tópicos Distinguidos de Matemática III","Tópicos Distinguidos de Matemática IV","Matemática do Ensino Médio para Professores I","Cultura Matemática I","Cultura Matemática II","Cultura Matemática III","Atividade de Cultura Matemática I","Atividades de Extensão I","Atividades Extensão II","Atividades Extensão III","Atividades Extensão IV","Atividades Extensão V","Atividades Extensão VI","Atividades Extensão VII","Atividades Extensão VIII","Atividades Extensão IX","Estágio Supervisionado I","Estágio Supervisionado II","Iniciação Científica I","Iniciação Científica II","Noções de Estatística","Laboratório de Estatística","Linguagem R","Estatística Descritiva","Introdução à Estatística Vital","Probabilidade I","Probabilidade II","Inferência","Introdução aos Modelos Probabilísticos","Estatística para Experimentalistas","Séries Temporais","Análise de Regressão","Planejamento e Pesquisa","Iniciação Científica I","Inferência Bayesiana","Consultoria Estatística I","Análise de Dados Discretos","Demografia","Consultoria Estatística II","Estágio em Empresa I","Estágio em Empresa II","Atividades de Extensão I","Atividades de Extensão II","Atividades de Extensão III","Atividades de Extensão IV","Atividades de Extensão V","Atividades de Extensão VI","Atividades de Extensão VII","Atividades de Extensão VIII","Análise de Regressão II","Inferência Estatística para Dados de Alta Dimensão","Estatística e Probabilidade I","Construção de oficinas de matemática para olimpíadas I","Elementos de Cálculo","Complementos de Matemática","Cálculo Numérico","Introdução à Matemática Computacional","Matemática Aplicada para Biologia","Algoritmos de otimização convexa","Modelagem Matemática","Análise Numérica I","Laboratório de Computação Científica","Fluxos em Redes","Métodos de Matemática Aplicada I","Introdução à Teoria Fuzzy","Estrutura Matemática do Eletromagnetismo","Análise Numérica III","Métodos de Matemática Aplicada III","Projeto Supervisionado","Projeto de Extensão Supervisonado I","Projeto Supervisionado II","Projeto de Extensão Supervisonado II","Atividades de Extensão I","Atividades de Extensão II","Atividades de Extensão III","Atividades de Extensão IV","Atividades de Extensão V","Atividades de Extensão VI","Atividades de Extensão VII","Atividades de Extensão VIII","Tópicos Especiais de Matemática Aplicada","Tópicos Especiais de Matemática Aplicada V","Tópicos Especiais de Matemática Aplicada VIII","Tópicos em Matemática Aplicada II","Análise Aplicada","Matrizes","Estágio Supervisionado em Ciência da Computação","Estágio Supervisionado em Ciência da Computação II","Projeto Final de Graduação","Estudo Dirigido","Estudo Dirigido II","Seminários sobre Computação e Tecnologia","Estágio de Iniciação Científica I","Estágio de Iniciação Científica II","Monitoria","Monitoria II","Algoritmos e Programação de Computadores","Estruturas de Dados","Programação Orientada a Objetos","Fundamentos Matemáticos da Computação","Organização Básica de Computadores e Linguagem de Montagem","Engenharia de Software","Projeto e Análise de Algoritmos I","Sistemas Operacionais","Desafios de Programação I","Bancos de Dados: Teoria e Prática","Projeto e Análise de Algoritmos II","Laboratório de Circuitos Digitais","Verificação, Validação e Testes de Software","Engenharia de Software","Sistemas Distribuídos","Desafios de Programação III","Projeto de Sistemas Computacionais","Algoritmos de Aproximação","Construção de Interfaces Homem-Computador","Programação Linear Inteira","Redes de Computadores","Programação de Redes de Computadores","Projeto em Sistemas de Programação","Projeto em Computação com Extensão","Projeto em Sistemas de Computação","Teoria e Aplicações de Grafos","Aprendizado de Máquina","Introdução à Criptografia","Introdução à Inteligência Artificial","Tópicos em Teoria da Computação I","Introdução ao Processamento de Imagem Digital","Projeto e Construção de Compiladores","Tópicos em Engenharia de Software I","Tópicos em Engenharia de Computação","Computação Gráfica","Tópicos em Redes de Computadores I","Tópicos em Computação Distribuída","Introdução à Programação Paralela","Tópicos em Arquitetura e Hardware I","Atividades de extensão I","Atividades de extensão II","Atividades de extensão III","Atividades de extensão IV","Atividades de extensão V","Atividades de extensão VI","Atividades de extensão VII","Atividades de extensão VIII","Projeto Integrador Interdisciplinar de Extensão III","Oficina de Informática Básica I","Antropoceno: Desafios da Complexidade Ambiental","Introdução à Física","Tópicos de Física Aplicada III","Tópicos de Astronomia e Astrofísica VI","Tópicos de Física Clássica VI","Física da Fala e Audição","Fundamentos de Física para a Biologia","Física (Biologia)","Física Geral I","Introdução à Física Experimental I","Física Geral II","Óptica Aplicada","Introdução à Física Experimental II","Mecânica Geral I","Termodinâmica","Física Geral III","Física Experimental III","Introdução à Teoria de Informação: Aspectos Clássicos e Quânticos","Introdução à Física Experimental III","Mecânica Geral II","Física Geral IV","Lasers e Aplicações","Estrutura de Matéria II","Eletromagnetismo I","Métodos Matemáticos da Física I","Instrumentação I","Métodos da Física Experimental I","Fontes Alternativas de Energia","Radiação: Interação e Detecção II","Estrutura da Matéria","Iniciação Científica I","Física Estatística","Tópicos de Ensino de Física I","Métodos de Computação Científica I","Instrumentação II","Métodos da Física Experimental II","Iniciação Científica II","Tópicos de Ensino de Física II","Métodos da Física Experimental III","Engenharia de Materiais Estruturados e Dispositivos","Imagens Médicas com Radiação Não-Ionizantes","Radiobiologia e Radioproteção","Mecânica Quântica II","Métodos de Física Experimental VII","Métodos da Física Experimental VI","Projeto de Curso em Engenharia Física","Monografia","Monografia em Ensino de Física I","Estágio Supervisionado I","Estágio Supervisionado II","Estágio em Engenharia Física","Iniciação à Prática de Ensino I","Iniciação à Prática de Ensino II","Iniciação à Prática de Ensino III","Projetos Integrados do Ensino de Física","Práticas de Ensino de Física","Seminários sobre a Profissão","Práticas de Engenharia Física I","Atividades Científico - Culturais I","Práticas de Engenharia Física II","Atividades Científico - Culturais III","Atividades Científico - Culturais VI","Projetos Integrados em Engenharia Física III","Práticas em Empresa Júnior","Atividades de Extensão A3","Tópicos de Extensão III","Tópicos de Extensão VII"],
+                professors: ["João Silva","Mariana Rodrigues","Pedro Henriqueias","Lucas Almeida Santos","Ana Costa","Carlos Pereira","Beatriz Fernandes","Gustavo Souza Lima","Daniel Rocha","Isabela Mendes","Fernando Lima","Sofia Alves Costa","Rafael Gomes","Maria Eduarda Brito","José Pereira Oliveira","Laura Barbosa","André Conceição Silva","Felipe Carvalho","Antônio Neves","Juliana Ribeiro","Ricardo Pinto","Manuela Moreira","Eduardo Castro Sousa","Camila Morais","Thiago Barros","Larissa Teixeira Santos","Luan Ribeiro","Vitória Rocha","Diego Lima","Letícia Alves","Paulo Costa","Bruna Martins","Mateus Dias Neves","Rafaela Nunes Ribeiro","Vinícius Carvalho","Giovanna Ferreira Moreira","Caio Santana","Yasmin Vieira","Victor Barros Teixeira","Clara Conceição","Leonardo Freitas Ferreira","Helena Rodrigues","Gabriel Fernandes Costa","Alice Oliveira","Guilherme Silva Pereira","Evelyn Mendes","Matheus Rocha Dias","Bianca Nunes","Arthur Teixeira Santana","Julia Conceição","Davi Freitas Rodrigues","Lorena Lima","Miguel Alves Pinto","Sarah Gomes","Enzo Mendes Morais","Lívia Souza","Nicolas Barbosa Santana","Valentina Rocha","Samuel Nunes Vieira","Melissa Carvalho","Bernardo Ferreira Rocha","Isadora Pinto","Murilo Castro Alves","João Pedro Morais","Rebeca Barros Mendes","Lorenzo Teixeira","Stella Santana Conceição","Benjamin Freitas","Liz Ribeiro Neves","Francisco Pinto","Alana Rocha","Theo Lima Moreira","Nicole Alves Castro","Benício Gomes","Bárbara Mendes Teixeira","Calebe Souza","Elisa Barbosa Freitas","João Guilherme Nunes","Olívia Carvalho Ribeiro","Pedro Henrique Ferreira","Mariana Pinto Lima","Heitor Castro Alves","Melina Morais","Noah Barros Teixeira","Antonella Santana","Levi Freitas Vieira","Aurora Ribeiro Neves","João Lucas Pinto","Esther Rocha","Kalel Lima Moreira","Luna Alves Castro","Lucca Gomes","Maria Eduarda Mendes Teixeira","Miguel Souza","Ana Clara Barbosa Freitas","Arthur Rocha","Júlia Nunes Vieira","Davi Carvalho Ribeiro","Manuela Ferreira","Enzo Gabriel Pinto Lima","Beatriz Castro Alves","Gabriel Morais","Lívia Barros Teixeira","João Pedro Neves","Maria Eduarda Ribeiro","Pedro Oliveira Santos","Ana Costa e Silva","Carlos Pereira Filho","Mariana Rodrigues Silva","Lucas Almeida Braga","Beatriz Fernandes Costa","Fernando Lima Júnior","Sofia Alves Moreira","Rafael Gomes Souza","Isabela Mendes Castro","Gustavo Souza Pires","Laura Barbosa Dias","Daniel Rocha Matos","Luiza Martins Neves","Marcelo Dias Pereira","Carolina Nunes Lacerda","Felipe Carvalho Filho","Gabriela Ferreira Campos","Antônio Neves Oliveira","Juliana Ribeiro Faria","Ricardo Pinto Correia","Manuela Moreira Alves","Eduardo Castro Lima","Camila Morais Santos","Thiago Barros Rocha","Larissa Teixeira Gomes","André Conceição Braga","Amanda Santana Alves","Bruno Freitas Costa","Fernanda Vieira Lima","Luan Ribeiro Almeida","Vitória Rocha Castro","Diego Lima Morais","Letícia Alves Pires","José Gomes Nunes","Patrícia Barbosa Pinto","Paulo Costa Faria","Bruna Martins Correia","Mateus Dias Santos","Rafaela Nunes Almeida","Vinícius Carvalho Braga","Giovanna Ferreira Costa","Caio Santana Lima","Yasmin Vieira Morais","Victor Barros Pires","Clara Conceição Nunes","Leonardo Freitas Faria","Helena Rodrigues Correia","Gabriel Fernandes Santos","Alice Oliveira Almeida","Guilherme Silva Braga","Evelyn Mendes Costa","Matheus Rocha Lima","Bianca Nunes Morais","Arthur Teixeira Pires","Julia Conceição Nunes","Davi Freitas Faria","Lorena Lima Correia","Miguel Alves Santos","Sarah Gomes Almeida","Enzo Mendes Braga","Lívia Souza Costa","Nicolas Barbosa Lima","Valentina Rocha Morais","Samuel Nunes Pires","Melissa Carvalho Nunes","Bernardo Ferreira Faria","Isadora Pinto Correia","Murilo Castro Santos","João Pedro Morais Almeida","Rebeca Barros Braga","Lorenzo Teixeira Costa","Stella Santana Lima","Benjamin Freitas Morais","Liz Ribeiro Pires","Francisco Pinto Nunes","Alana Rocha Faria","Theo Lima Correia","Nicole Alves Santos","Benício Gomes Almeida","Bárbara Mendes Braga","Calebe Souza Costa","Elisa Barbosa Lima","João Guilherme Nunes Morais","Olívia Carvalho Pires","Pedro Henrique Ferreira Nunes","Mariana Pinto Faria","Heitor Castro Correia","Melina Morais Santos","Noah Barros Almeida","Antonella Santana Braga","Levi Freitas Costa","Aurora Ribeiro Lima","João Lucas Morais Pires","Esther Conceição Nunes","Kalel Vieira Faria","Luna Ribeiro Correia","Lucca Almeida Santos","Maria Eduarda Braga Costa","Miguel Lima Morais","Ana Clara Pires Nunes","Arthur Faria Correia","Júlia Santos Almeida","Davi Braga Costa","Manuela Lima Morais","Enzo Gabriel Pires Nunes","Beatriz Faria Correia","Gabriel Santos Almeida","Lívia Braga Costa","João Silva Santos","Caleb Santos Rocha","Alice Costa Faria","Benício Alves Correia","Luiza Gomes Almeida","João Miguel Pires","Heloísa Ribeiro Matos","Bernardo Dias Lacerda","Isadora Nunes Campos","Theo Moreira Sales","Elisa Fernandes Castro","Noah Barbosa Lima","Lizandra Rodrigues Silva","Enzo Gabriel Vieira","Valentina Souza Braga","Samuel Teixeira Mendes","Marina Conceição Faria","Arthur Emmanuel Dias","Sophia Cavalcante Porto"],
+                credits: [4,4,6,2,8,6,4,4,6,4,6,6,4,8,8,8,6,4,4,6,8,2,2,6,4,4,4,4,4,4,4,4,2,2,2,2,2,8,8,4,4,4,3,5,4,2,4,4,6,4,4,5,5,5,5,5,12,5,5,12,5,5,2,2,2,2,2,2,2,2,5,5,4,4,4,2,4,4,4,4,4,4,4,4,6,4,4,4,4,4,4,4,4,2,2,2,2,2,2,2,2,4,4,4,2,8,8,12,12,12,6,6,2,12,12,8,8,6,6,4,4,4,4,4,4,4,6,4,4,4,4,4,4,4,4,4,4,4,2,12,12,12,4,4,4,4,4,4,6,4,2,4,4,4,4,4,1,1,1,1,2,2,6,6,12,2,2,6,2,4,4,4,3,4,4,2,4,2,2,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,4,4,2,4,6,4,4,4,2,6,4,4,4,4,4,4,4,8,8,8,10,10,20,4,4,4,8,8,2,2,3,4,2,2,6,4,2,2,2]
+            };
+
+            /**
+             * Processa os dados brutos e os transforma em um array de objetos de matéria.
+             * @returns {Array} Array de matérias do usuário.
+             */
+            function loadUserSubjects() {
+                // Recupera as matérias do localStorage ou cria uma nova lista a partir dos dados brutos.
+                const storedSubjects = localStorage.getItem('userSubjects');
+                if (storedSubjects) {
+                    return JSON.parse(storedSubjects);
+                }
+
+                // Se não houver dados salvos, cria a lista inicial a partir dos dados "do backend".
+                const initialSubjects = subjectsData.codes.map((code, index) => ({
+                    id: code, // Usando o código da matéria como ID único
+                    name: `${code} - ${subjectsData.names[index]}`,
+                    professor: subjectsData.professors[index],
+                    credits: subjectsData.credits[index],
+                    absences: 0,
+                    limit: subjectsData.credits[index] * 2, 
+                }));
+                
+                // Salva a lista inicial para persistência
+                localStorage.setItem('userSubjects', JSON.stringify(initialSubjects));
+                return initialSubjects;
+            }
+
+            // --- ESTADO DA APLICAÇÃO ---
+            let nav = 0;
+            let clicked = null;
+            let userSubjects = loadUserSubjects();
+            let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
+
+            // --- ELEMENTOS DO DOM ---
+            const calendar = document.getElementById('calendar');
+            const monthDisplay = document.getElementById('monthDisplay');
+            const newEventModal = document.getElementById('newEventModal');
+            const eventIdInput = document.getElementById('eventIdInput');
+            const eventTitleInput = document.getElementById('eventTitleInput');
+            const eventLocationInput = document.getElementById('eventLocationInput');
+            const eventDateInput = document.getElementById('eventDateInput');
+            const eventStartTimeInput = document.getElementById('eventStartTimeInput');
+            const eventDurationInput = document.getElementById('eventDurationInput');
+            const deleteButton = document.getElementById('deleteButton');
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const subjectList = document.getElementById('subjectList');
+            const weekdays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            
+            // --- FUNÇÕES ---
+
+            function openModal(date) {
+                clicked = date;
+                eventDateInput.value = date;
+                newEventModal.style.display = 'flex';
+            }
+
+            function loadCalendar() {
+                const dt = new Date();
+                if (nav !== 0) dt.setMonth(new Date().getMonth() + nav);
+
+                const day = dt.getDate();
+                const month = dt.getMonth();
+                const year = dt.getFullYear();
+
+                const firstDayOfMonth = new Date(year, month, 1);
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const dateString = firstDayOfMonth.toLocaleDateString('pt-br', { weekday: 'long' });
+                const paddingDays = weekdays.indexOf(dateString.charAt(0).toUpperCase() + dateString.slice(1));
+                
+                monthDisplay.innerText = `${dt.toLocaleDateString('pt-br', { month: 'long' }).toUpperCase()} ${year}`;
+                calendar.innerHTML = '';
+
+                for(let i = 1; i <= paddingDays + daysInMonth; i++) {
+                    const daySquare = document.createElement('div');
+                    daySquare.classList.add('day', 'relative', 'p-2', 'h-24', 'sm:h-32', 'bg-white', 'rounded-md', 'shadow-sm', 'cursor-pointer', 'flex', 'flex-col');
+                    
+                    const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i - paddingDays).padStart(2, '0')}`;
+                    daySquare.addEventListener('click', () => openModal(dayString));
+
+                    if (i > paddingDays) {
+                        const dayOfMonth = i - paddingDays;
+                        const dayNumber = document.createElement('div');
+                        dayNumber.innerText = dayOfMonth;
+                        daySquare.appendChild(dayNumber);
+
+                        const eventsForDay = events.filter(e => e.date === dayString);
+                        if (eventsForDay.length > 0) {
+                           const eventContainer = document.createElement('div');
+                           eventContainer.classList.add('mt-1', 'space-y-1', 'overflow-y-auto', 'flex-grow');
+                           eventsForDay.forEach(event => {
+                               const eventDiv = document.createElement('div');
+                               eventDiv.classList.add('event', 'bg-blue-500', 'text-white', 'rounded', 'truncate');
+                               eventDiv.innerText = event.title;
+                               eventDiv.addEventListener('click', (e) => {
+                                   e.stopPropagation(); // Impede que o clique no evento abra um novo modal
+                                   editEvent(event.id);
+                               });
+                               eventContainer.appendChild(eventDiv);
+                           });
+                           daySquare.appendChild(eventContainer);
+                        }
+                        if (dayOfMonth === day && nav === 0) {
+                            dayNumber.classList.add('bg-blue-600', 'text-white', 'w-7', 'h-7', 'rounded-full', 'flex', 'items-center', 'justify-center');
+                        }
+                    } else {
+                        daySquare.classList.add('bg-transparent', 'shadow-none', 'cursor-default');
+                    }
+                    calendar.appendChild(daySquare);    
+                }
+            }
+            
+            function closeModal() {
+                document.getElementById('eventForm').reset();
+                deleteButton.classList.add('hidden');
+                newEventModal.style.display = 'none';
+                clicked = null;
+                loadCalendar();
+            }
+
+            function saveEvent(e) {
+                e.preventDefault();
+                if (eventTitleInput.value) {
+                    const eventData = {
+                        id: eventIdInput.value || Date.now().toString(), // Cria um novo ID se não existir
+                        date: eventDateInput.value,
+                        title: eventTitleInput.value,
+                        location: eventLocationInput.value,
+                        startTime: eventStartTimeInput.value,
+                        duration: eventDurationInput.value,
+                    };
+
+                    const existingEventIndex = events.findIndex(event => event.id === eventData.id);
+                    if (existingEventIndex > -1) {
+                        events[existingEventIndex] = eventData; // Atualiza
+                    } else {
+                        events.push(eventData); // Adiciona
+                    }
+
+                    localStorage.setItem('events', JSON.stringify(events));
+                    closeModal();
+                }
+            }
+
+            function editEvent(eventId) {
+                const event = events.find(e => e.id === eventId);
+                if (event) {
+                    openModal(event.date);
+                    eventIdInput.value = event.id;
+                    eventTitleInput.value = event.title;
+                    eventLocationInput.value = event.location;
+                    eventDateInput.value = event.date;
+                    eventStartTimeInput.value = event.startTime;
+                    eventDurationInput.value = event.duration;
+                    deleteButton.classList.remove('hidden');
+                }
+            }
+
+            function deleteCurrentEvent() {
+                const eventId = eventIdInput.value;
+                events = events.filter(e => e.id !== eventId);
+                localStorage.setItem('events', JSON.stringify(events));
+                closeModal();
+            }
+
+            function toggleSideMenu(open = true) {
+                sideMenu.classList.toggle('menu-open', open);
+                sideMenu.classList.toggle('menu-closed', !open);
+                menuOverlay.style.display = open ? 'block' : 'none';
+            }
+            
+            function renderSubjects() {
+                subjectList.innerHTML = '';
+                userSubjects.forEach(subject => {
+                    const absencePercentage = subject.limit > 0 ? (subject.absences / subject.limit) * 100 : 0;
+                    let progressBarColor = 'bg-green-500';
+                    if (absencePercentage > 50) progressBarColor = 'bg-yellow-500';
+                    if (absencePercentage > 80) progressBarColor = 'bg-red-500';
+
+                    const card = `
+                        <div class="subject-card bg-gray-50 p-4 rounded-lg shadow">
+                            <h3 class="font-bold text-gray-800">${subject.name}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${subject.professor}</p>
+                            <div class="flex justify-between items-center text-sm mb-1">
+                                <span>Faltas</span>
+                                <span>${subject.absences} / ${subject.limit}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="${progressBarColor} h-2.5 rounded-full" style="width: ${absencePercentage}%"></div></div>
+                            <div class="flex justify-end mt-3 space-x-2">
+                                <button data-id="${subject.id}" data-action="subtract" class="absence-btn w-8 h-8 bg-red-500 text-white rounded-full btn-hover">-</button>
+                                <button data-id="${subject.id}" data-action="add" class="absence-btn w-8 h-8 bg-green-500 text-white rounded-full btn-hover">+</button>
+                            </div>
+                        </div>`;
+                    subjectList.innerHTML += card;
+                });
+            }
+            
+            function handleAbsence(e) {
+                const target = e.target.closest('.absence-btn');
+                if (!target) return;
+                
+                const id = target.dataset.id;
+                const action = target.dataset.action;
+                const subject = userSubjects.find(s => s.id === id);
+
+                if (subject) {
+                    if (action === 'add' && subject.absences < subject.limit) {
+                        subject.absences++;
+                    } else if (action === 'subtract' && subject.absences > 0) {
+                        subject.absences--;
+                    }
+                    localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
+                    renderSubjects();
+                }
+            }
+
+            function initListeners() {
+                document.getElementById('nextButton').addEventListener('click', () => { nav++; loadCalendar(); });
+                document.getElementById('backButton').addEventListener('click', () => { nav--; loadCalendar(); });
+                document.getElementById('addEventBtn').addEventListener('click', () => openModal(new Date().toISOString().slice(0, 10)));
+                document.getElementById('cancelButton').addEventListener('click', closeModal);
+                document.getElementById('eventForm').addEventListener('submit', saveEvent);
+                deleteButton.addEventListener('click', deleteCurrentEvent);
+                document.getElementById('menuBtn').addEventListener('click', () => toggleSideMenu(true));
+                document.getElementById('closeMenuBtn').addEventListener('click', () => toggleSideMenu(false));
+                menuOverlay.addEventListener('click', () => toggleSideMenu(false));
+                subjectList.addEventListener('click', handleAbsence);
+            }
+
+            // --- INICIALIZAÇÃO DA APLICAÇÃO ---
+            initListeners();
+            renderSubjects();
+            loadCalendar();
+        });
+    </script>
+</body>
+</html>
