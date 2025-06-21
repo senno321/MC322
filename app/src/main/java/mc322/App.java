@@ -5,11 +5,12 @@
 package mc322;
 
 
-// Ensure this import matches the actual package of GerenciadorDeEventos
 import mc322.evento.GerenciadorDeEventos;
 import mc322.usuario.Usuario;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication;
+import javax.swing.Spring;
 
-@SpringBootApplication
 /**
  * Contém a estrutura de implementação da aplicação.
  * 
@@ -22,6 +23,7 @@ import mc322.usuario.Usuario;
  * 
  */
 
+@SpringBootApplication
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
