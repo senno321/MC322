@@ -4,9 +4,12 @@
 
 package mc322;
 
+
+// Ensure this import matches the actual package of GerenciadorDeEventos
 import mc322.evento.GerenciadorDeEventos;
 import mc322.usuario.Usuario;
 
+@SpringBootApplication
 /**
  * Contém a estrutura de implementação da aplicação.
  * 
@@ -21,9 +24,6 @@ import mc322.usuario.Usuario;
 
 public class App {
     public static void main(String[] args) {
-        GerenciadorDeEventos gerenciador = new GerenciadorDeEventos();
-        Usuario usuario = new Usuario("Bruno", "sabasbruno132@gmail.com", "AmargoAzedo");
-        gerenciador.criarEvento(usuario, "Reunião", "CB03", "06/05/2025", "15:00", 120, "Lehilton", "IC", false);
-        System.out.println(usuario.getEventos().get(0).getCaracteristicaEvento());
+        SpringApplication.run(App.class, args);
     }
 }
