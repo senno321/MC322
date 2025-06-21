@@ -13,8 +13,7 @@ public class App {
     public static void main(String[] args) {
         GerenciadorDeEventos gerenciador = new GerenciadorDeEventos();
         Usuario usuario = new Usuario("Bruno", "sabasbruno132@gmail.com", "AmargoAzedo");
-        LocalDateTime dataHora = LocalDateTime.of(2025, 6, 21, 19, 0); //Precisamos que isso seja administrado dentro do gerenciador
-        gerenciador.criarEvento(usuario, "Reunião", "CB03", dataHora, 120, "Lehilton", "IC", false);
+        gerenciador.criarEvento(usuario, "Reunião", "CB03", "06/05/2025", "15:00", 120, "Lehilton", "IC", false);
         System.out.println(usuario.getEventos().get(0).getCaracteristicaEvento());
     }
 }
