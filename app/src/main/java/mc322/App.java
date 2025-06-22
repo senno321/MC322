@@ -5,11 +5,8 @@
 package mc322;
 
 
-import mc322.evento.GerenciadorDeEventos;
-import mc322.usuario.Usuario;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
-import javax.swing.Spring;
 
 /**
  * Contém a estrutura de implementação da aplicação.

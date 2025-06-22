@@ -1,4 +1,4 @@
-package com.exemplo.meusite;
+package mc322;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
