@@ -11,11 +11,16 @@ import java.util.Map;
 import mc322.usuario.Usuario;
 
 public class GerenciadorDeMaterias {
+    public static final GerenciadorDeMaterias INSTANCE = new GerenciadorDeMaterias();
     public Map<String, Materia> catalogoMaterias;
 
     public GerenciadorDeMaterias() {
         catalogoMaterias = new HashMap<>();
         carregarMateriasDosArquivos();
+    }
+
+    public static GerenciadorDeMaterias getInstance() {
+        return INSTANCE;
     }
 
     private void carregarMateriasDosArquivos() {

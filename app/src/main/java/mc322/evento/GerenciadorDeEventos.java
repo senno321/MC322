@@ -8,7 +8,7 @@ import mc322.usuario.Usuario;
 
 public class GerenciadorDeEventos {
 
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             Materia materia,
             String tipo, double peso, String conteudo) {
 
@@ -20,7 +20,7 @@ public class GerenciadorDeEventos {
         usuario.adicionarEvento(evento);
     }
 
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             String participantes, String objetivo, boolean online) {
 
         String dataHoraInicio = data + " " + horaInicio;
@@ -31,7 +31,7 @@ public class GerenciadorDeEventos {
         usuario.adicionarEvento(evento);
     }
 
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             String descricaoAtividade, String publicoAlco, boolean valeHoras, int cargaHoraria) {
 
         String dataHoraInicio = data + " " + horaInicio;
