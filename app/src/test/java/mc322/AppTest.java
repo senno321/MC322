@@ -3,8 +3,10 @@
  */
 package mc322;
 
-import mc322.App;
 import org.junit.jupiter.api.Test;
+
+import mc322.ui.App;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {

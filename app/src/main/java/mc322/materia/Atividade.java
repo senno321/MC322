@@ -6,6 +6,7 @@ package mc322.materia;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Representa uma atividade acadêmica associada a uma matéria,
@@ -19,13 +20,13 @@ public class Atividade {
     private boolean completa;
 
     /**
-     * Construtor que inicializa uma atividade com nome, peso, conteúdo e data de entrega.
-     * Inicialmente, a atividade não está concluída.
-     * 
-     * @param nome         nome da atividade.
-     * @param peso         peso da atividade na média final.
-     * @param conteudo     conteúdo cobrado na atividade.
-     * @param data         data e hora da entrega da atividade.
+     * Inicializa a atividade com nome, peso, conteúdo e data de entrega.
+     * A atividade inicia como não concluída.
+     *
+     * @param nome     nome da atividade
+     * @param peso     peso da atividade na média final (deve ser >= 0)
+     * @param conteudo conteúdo cobrado na atividade
+     * @param data     data e hora de entrega da atividade
      */
     public Atividade(String nome, double peso, String conteudo, LocalDateTime data) {
         this.nome = nome;
@@ -38,43 +39,49 @@ public class Atividade {
     /**
      * Retorna o nome da atividade.
      * 
-     * @return o nome da atividade.
+     * @return nome da atividade
      */
     public String getNome() {
         return this.nome;
     }
 
     /**
-     * Define o nome da atividade.
+     * Atualiza o nome da atividade.
      * 
-     * @param nome novo nome da atividade.
+     * @param nome novo nome da atividade (não pode ser nulo ou vazio)
+     * @throws IllegalArgumentException se nome for nulo ou vazio
      */
     public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty())
+            throw new IllegalArgumentException("Nome da atividade não pode ser vazio.");
         this.nome = nome;
     }
 
     /**
-     * Retorna o peso da atividade na média.
+     * Retorna o peso da atividade na média final.
      * 
-     * @return o peso da atividade.
+     * @return peso da atividade
      */
     public double getPeso() {
         return this.peso;
     }
-    
+
     /**
-     * Define o peso da atividade.
+     * Atualiza o peso da atividade.
      * 
-     * @param peso novo peso da atividade.
+     * @param peso novo peso (deve ser >= 0)
+     * @throws IllegalArgumentException se peso for negativo
      */
     public void setPeso(double peso) {
+        if (peso < 0)
+            throw new IllegalArgumentException("Peso da atividade não pode ser negativo.");
         this.peso = peso;
     }
 
     /**
      * Retorna o conteúdo cobrado na atividade.
      * 
-     * @return o conteúdo da atividade.
+     * @return conteúdo da atividade
      */
     public String getConteudo() {
         return this.conteudo;
@@ -83,29 +90,46 @@ public class Atividade {
     /**
      * Retorna a data e hora de entrega da atividade.
      * 
-     * @return um {@code LocalDateTime} representando o prazo de entrega.
+     * @return data e hora da entrega
      */
     public LocalDateTime getData() {
         return this.dataDeEntrega;
     }
 
     /**
-     * Define a data e hora de entrega da atividade a partir de strings.
-     * 
-     * @param data       data no formato "dd/MM/yyyy".
-     * @param horaInicio hora no formato "HH:mm".
+     * Define a data e hora de início do item usando strings separadas.
+     *
+     * @param data       Data no formato "dd/MM/yyyy".
+     * @param horaInicio Hora no formato "HH:mm".
+     * @throws IllegalArgumentException se os parâmetros forem inválidos ou mal
+     *                                  formatados.
      */
-    public void setData(String data, String horaInicio) {
-        String dataHoraInicio = data + " " + horaInicio;
+    public void setDataHoraInicio(String data, String horaInicio) {
+        if (data == null || data.trim().isEmpty()) {
+            throw new IllegalArgumentException("A data fornecida não pode ser nula ou vazia.");
+        }
+        if (horaInicio == null || horaInicio.trim().isEmpty()) {
+            throw new IllegalArgumentException("A hora de início fornecida não pode ser nula ou vazia.");
+        }
+
+        String dataDeEntrega = data.trim() + " " + horaInicio.trim();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        LocalDateTime ldt = LocalDateTime.parse(dataHoraInicio, formatter);
-        this.dataDeEntrega = ldt;
+
+        try {
+            LocalDateTime ldt = LocalDateTime.parse(dataDeEntrega, formatter);
+            this.dataDeEntrega = ldt;
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "Formato de data ou hora inválido. Esperado: 'dd/MM/yyyy HH:mm'. Valor recebido: '" +
+                            dataDeEntrega + "'",
+                    e);
+        }
     }
 
     /**
-     * Verifica se a atividade já foi concluída.
+     * Indica se a atividade foi concluída.
      * 
-     * @return {@code true} se a atividade foi concluída; {@code false} caso contrário.
+     * @return {@code true} se concluída, {@code false} caso contrário
      */
     public boolean getCompleta() {
         return this.completa;

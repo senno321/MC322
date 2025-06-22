@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Representa uma matéria acadêmica com nome, professor responsável, quantidade de faltas,
+ * Representa uma matéria acadêmica com nome, professor responsável, quantidade
+ * de faltas,
  * lista de atividades e créditos.
  */
 public class Materia {
@@ -115,6 +116,7 @@ public class Materia {
      */
     @Override
     public String toString() {
-        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/" + this.getLimiteFaltas() + "]";
+        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/"
+                + this.getLimiteFaltas() + "]";
     }
 }

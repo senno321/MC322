@@ -2,29 +2,35 @@
  * Material usado na disciplina MC322 - Programação orientada a objetos.
  */
 
-package mc322;
+package mc322.ui;
 
-
-import mc322.evento.GerenciadorDeEventos;
-import mc322.usuario.Usuario;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
-import javax.swing.Spring;
 
 /**
  * Contém a estrutura de implementação da aplicação.
  * 
  * @author Bruno Medeiros Saback - 281746
  * @author Lucas
- * @author Filipe
+ * @author Filipe de Souza Lalic - 288884
  * @author Kauan Cunha da Silva - 240030
  * 
  *         Comentários foram gerados em sua maioria por IA
  * 
  */
 
+/**
+ * Classe principal da aplicação Spring Boot.
+ * Inicializa e executa o contexto da aplicação.
+ */
 @SpringBootApplication
 public class App {
+
+    /**
+     * Ponto de entrada da aplicação.
+     * 
+     * @param args argumentos de linha de comando (não utilizados).
+     */
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
