@@ -36,7 +36,7 @@ public class GerenciadorDeEventos {
      * @param peso        peso da atividade na média.
      * @param conteudo    conteúdo cobrado na atividade.
      */
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             String nomeMateria, double peso, String conteudo) {
 
         LocalDateTime ldt = LocalDateTime.parse(data + " " + horaInicio, FORMATTER);
@@ -69,7 +69,7 @@ public class GerenciadorDeEventos {
      * @param peso      peso da atividade na média.
      * @param conteudo  conteúdo cobrado na atividade.
      */
-    public void criarEvento(Usuario usuario, Atividade atividade, Materia materia, double peso, String conteudo) {
+    public static void criarEvento(Usuario usuario, Atividade atividade, Materia materia, double peso, String conteudo) {
         CaracteristicaEvento caracteristica = new EventoAtividade(materia, peso, conteudo);
         Evento evento = new Evento(atividade.getNome(), "Casa", atividade.getData(), 0, caracteristica);
         usuario.adicionarEvento(evento);
@@ -88,7 +88,7 @@ public class GerenciadorDeEventos {
      * @param objetivo      objetivo ou pauta da reunião.
      * @param online        {@code true} se a reunião for online; {@code false} caso contrário.
      */
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             String participantes, String objetivo, boolean online) {
 
         LocalDateTime ldt = LocalDateTime.parse(data + " " + horaInicio, FORMATTER);
@@ -111,7 +111,7 @@ public class GerenciadorDeEventos {
      * @param valeHoras        {@code true} se o evento valer horas de extensão.
      * @param cargaHoraria     quantidade de horas atribuídas ao evento (se valer horas).
      */
-    public void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
+    public static void criarEvento(Usuario usuario, String nome, String local, String data, String horaInicio, int duracao,
             String descricaoAtividade, String publicoAlvo, boolean valeHoras, int cargaHoraria) {
 
         LocalDateTime ldt = LocalDateTime.parse(data + " " + horaInicio, FORMATTER);

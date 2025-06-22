@@ -19,6 +19,7 @@ import mc322.usuario.Usuario;
  * e permitindo que matérias sejam adicionadas a usuários.
  */
 public class GerenciadorDeMaterias {
+    private static final GerenciadorDeMaterias INSTANCE = new GerenciadorDeMaterias();
     /**
      * Mapeia código da matéria para o objeto Materia correspondente.
      */
@@ -30,6 +31,10 @@ public class GerenciadorDeMaterias {
     public GerenciadorDeMaterias() {
         catalogoMaterias = new HashMap<>();
         carregarMateriasDosArquivos();
+    }
+
+    public static GerenciadorDeMaterias getInstance() {
+        return INSTANCE;
     }
 
     /**
