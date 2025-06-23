@@ -52,6 +52,10 @@ public abstract class ItemAgendavel {
         return this.nome;
     }
 
+
+    public Long getId() {
+        return this.id;
+    }
     /**
      * Define o nome do item agendável.
      *

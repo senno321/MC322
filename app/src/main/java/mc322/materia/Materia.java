@@ -5,9 +5,11 @@
 package mc322.materia;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.ArrayList;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
@@ -26,7 +28,7 @@ public class Materia {
     private String professor;
     private int faltas;
 
-    @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Atividade> listaAtividades;
 
     private final int creditos;
@@ -159,5 +161,27 @@ public class Materia {
     public String toString() {
         return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/"
                 + this.getLimiteFaltas() + "]";
+    }
+
+    /**
+     * Compara duas matérias para verificar se são iguais, baseando-se no código.
+     * 
+     * @param o objeto a ser comparado.
+     * @return true se os códigos forem iguais, false caso contrário.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Materia materia = (Materia) o;
+        return Objects.equals(getCodigo(), materia.getCodigo());
+    }
+
+    /**
+     * Gera um código hash para a matéria com base no seu código.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCodigo());
     }
 }

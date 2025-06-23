@@ -39,9 +39,6 @@ public class App {
         //Debuga as paradas
         System.out.println(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211")); 
         
-        //Setando o usuario atual e os gerenciadores.
-        Usuario.innit("Testador", "test123@gmail.com", "12345");
-        Usuario.getInstance().adicionarMateria(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211"));
         //Inicia a aplicação Spring Boot
         SpringApplication.run(App.class, args);
     }

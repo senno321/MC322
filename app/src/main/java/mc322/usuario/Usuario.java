@@ -20,6 +20,7 @@ import mc322.materia.Materia;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,11 +46,11 @@ public class Usuario {
 
     private String nome;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER) // ADICIONE O FETCHTYPE AQUI
     @JoinTable(
-        name = "usuario_materia", // Nome da nova tabela que será criada
-        joinColumns = @JoinColumn(name = "usuario_id"), // Coluna que aponta para o ID do Usuario
-        inverseJoinColumns = @JoinColumn(name = "materia_codigo") // Coluna que aponta para o ID da Materia
+        name = "usuario_materia",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "materia_codigo")
     )
     private List<Materia> materias = new ArrayList<>();
 
@@ -73,14 +74,19 @@ public class Usuario {
             throw new IllegalStateException("Usuário não está definido.");
         }
     }
+    
 
-    public static void innit(String nome, String email, String senha){
-        if (usuarioAtual == null) {
-            usuarioAtual = new Usuario(nome, email, senha);
-        } else {
-            throw new IllegalStateException("Usuário já está definido.");
-        }
+    public static void setUsuarioAtual(Usuario usuario) {
+        usuarioAtual = usuario;
     }
+
+    // public static void innit(String nome, String email, String senha){
+    //     if (usuarioAtual == null) {
+    //         usuarioAtual = new Usuario(nome, email, senha);
+    //     } else {
+    //         throw new IllegalStateException("Usuário já está definido.");
+    //     }
+    // }
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
@@ -96,6 +102,10 @@ public class Usuario {
     public String getNome() {
         return this.nome;
     }
+
+    public Long getId() {
+    return this.id;
+}
 
     /** Define o nome do usuário */
     public void setNome(String nome) {

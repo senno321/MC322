@@ -22,13 +22,20 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registrarUsuario(@RequestBody Usuario novoUsuario) {
-        // 1. Verifica se o email já existe usando o repositório
-        if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isPresent()) {
+    public ResponseEntity<String> registrarUsuario(@RequestBody Map<String, String> dadosRegistro) {
+        String email = dadosRegistro.get("email");
+        String nome = dadosRegistro.get("nome");
+        String senha = dadosRegistro.get("senha");
+
+        // 1. Verifica se o email já existe
+        if (usuarioRepository.findByEmail(email).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("O email fornecido já está em uso.");
         }
         
-        // 2. Salva o novo usuário no banco de dados
+        // 2. Cria a instância de Usuário usando o construtor que gera o hash da senha
+        Usuario novoUsuario = new Usuario(nome, email, senha);
+        
+        // 3. Salva o novo usuário no banco de dados, agora com o hash correto
         usuarioRepository.save(novoUsuario);
         
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuário registrado com sucesso!");
@@ -47,12 +54,10 @@ public class UsuarioController {
 
         Usuario usuario = usuarioOptional.get();
 
-        // Usa o método verificarSenha que compara os hashes
         if (usuario.verificarSenha(senha)) {
-            // Define o usuário logado como a instância atual do singleton
-            // NOTA: Esta abordagem com singleton pode não ser ideal para um ambiente web real
-            // com múltiplos usuários, mas segue o padrão do seu projeto atual.
-            Usuario.innit(usuario.getNome(), usuario.getEmail(), senha);
+            // **AQUI ESTÁ A CORREÇÃO**
+            // Chame o novo método para DEFINIR o usuário atual, em vez de inicializar.
+            Usuario.setUsuarioAtual(usuario);
             
             return ResponseEntity.ok("Login bem-sucedido!");
         } else {
