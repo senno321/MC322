@@ -119,7 +119,13 @@
                             <option value="Prova">Prova</option>
                             <option value="Reunião">Reunião</option>
                             <option value="Extensão">Extensão</option>
+                            <option value="Atividade">Atividade</option>
                         </select>
+                    </div>
+
+                    <div>
+                        <label for="eventNameInput" class="text-sm font-medium text-gray-700">Nome do Evento</label>
+                        <input type="text" id="eventNameInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 mt-1" required>
                     </div>
                     
                     <input type="text" id="eventLocationInput" placeholder="Local" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
@@ -211,7 +217,7 @@
                            eventsForDay.forEach(event => {
                                const eventDiv = document.createElement('div');
                                eventDiv.classList.add('event', 'bg-blue-500', 'text-white', 'rounded', 'truncate');
-                               eventDiv.innerText = event.title;
+                               eventDiv.innerText = event.nome;
                                eventDiv.addEventListener('click', (e) => {
                                    e.stopPropagation();
                                    editEvent(event.id);
@@ -243,6 +249,7 @@
                 const eventData = {
                     id: eventIdInput.value || Date.now().toString(),
                     title: eventTitleSelect.value,
+                    nome: eventNameInput.value,
                     date: eventDateInput.value,
                     location: eventLocationInput.value,
                     startTime: eventStartTimeInput.value,
@@ -264,6 +271,7 @@
                     openModal(event.date);
                     eventIdInput.value = event.id;
                     eventTitleSelect.value = event.title;
+                    eventNameInput.value = event.nome || '';
                     eventLocationInput.value = event.location;
                     eventDateInput.value = event.date;
                     eventStartTimeInput.value = event.startTime;
