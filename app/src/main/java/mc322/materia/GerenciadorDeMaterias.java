@@ -1,5 +1,5 @@
 /*
- * Material usado na disciplina MC322 - Programação orientada a objetos.
+ * Material usado na disciplina mc322 - Programação orientada a objetos.
  */
 
 package mc322.materia;
@@ -7,6 +7,7 @@ package mc322.materia;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,60 +43,62 @@ public class GerenciadorDeMaterias {
      * e popula o catálogo. Lê códigos, nomes, professores e créditos.
      * Imprime erros se arquivos estiverem faltando ou incorretos.
      */
-    private void carregarMateriasDosArquivos() {
-        String caminhoArquivoCodigos = "MC322/txt/Código_Matérias.txt";
-        String caminhoArquivoNomes = "MC322/txt/Nome_Matérias.txt";
-        String caminhoArquivoProfessores = "MC322/txt/Nome_Professores.txt";
-        String caminhoArquivoCreditos = "MC322/txt/Crédito_Matérias.txt";
+private void carregarMateriasDosArquivos() {
+    String caminhoArquivoCodigos = "/mc322/txt/Codigo_Materias.txt";
+    String caminhoArquivoNomes = "/mc322/txt/Nome_Materias.txt";
+    String caminhoArquivoProfessores = "/mc322/txt/Nome_Professores.txt";
+    String caminhoArquivoCreditos = "/mc322/txt/Credito_Materias.txt";
 
-        List<String> codigos = new ArrayList<>();
-        List<String> nomes = new ArrayList<>();
-        List<String> professores = new ArrayList<>();
-        List<Integer> creditos = new ArrayList<>();
+    List<String> codigos = new ArrayList<>();
+    List<String> nomes = new ArrayList<>();
+    List<String> professores = new ArrayList<>();
+    List<Integer> creditos = new ArrayList<>();
 
-        // Carrega códigos das matérias
-        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoCodigos))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                codigos.add(linha);
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo de códigos: " + e.getMessage());
-            System.err.println("Verifique se '" + caminhoArquivoCodigos + "' está no local correto.");
+    // Carrega códigos das matérias
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            getClass().getResourceAsStream(caminhoArquivoCodigos)))) {
+        String linha;
+        while ((linha = br.readLine()) != null) {
+            codigos.add(linha);
         }
+    } catch (Exception e) {
+        System.err.println("Erro ao ler o arquivo de códigos: " + e.getMessage());
+        System.err.println("Verifique se '" + caminhoArquivoCodigos + "' está no local correto.");
+    }
 
-        // Carrega nomes das matérias
-        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoNomes))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                nomes.add(linha);
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo de nomes: " + e.getMessage());
-            System.err.println("Verifique se '" + caminhoArquivoNomes + "' está no local correto.");
+    // Repita o mesmo padrão para os outros arquivos:
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            getClass().getResourceAsStream(caminhoArquivoNomes)))) {
+        String linha;
+        while ((linha = br.readLine()) != null) {
+            nomes.add(linha);
         }
+    } catch (Exception e) {
+        System.err.println("Erro ao ler o arquivo de nomes: " + e.getMessage());
+        System.err.println("Verifique se '" + caminhoArquivoNomes + "' está no local correto.");
+    }
 
-        // Carrega nomes dos professores
-        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoProfessores))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                professores.add(linha);
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo de professores: " + e.getMessage());
-            System.err.println("Verifique se '" + caminhoArquivoProfessores + "' está no local correto.");
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            getClass().getResourceAsStream(caminhoArquivoProfessores)))) {
+        String linha;
+        while ((linha = br.readLine()) != null) {
+            professores.add(linha);
         }
+    } catch (Exception e) {
+        System.err.println("Erro ao ler o arquivo de professores: " + e.getMessage());
+        System.err.println("Verifique se '" + caminhoArquivoProfessores + "' está no local correto.");
+    }
 
-        // Carrega créditos das matérias
-        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivoCreditos))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                creditos.add(Integer.parseInt(linha.trim()));
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo de créditos: " + e.getMessage());
-            System.err.println("Verifique se '" + caminhoArquivoCreditos + "' está no local correto.");
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            getClass().getResourceAsStream(caminhoArquivoCreditos)))) {
+        String linha;
+        while ((linha = br.readLine()) != null) {
+            creditos.add(Integer.parseInt(linha.trim()));
         }
+    } catch (Exception e) {
+        System.err.println("Erro ao ler o arquivo de créditos: " + e.getMessage());
+        System.err.println("Verifique se '" + caminhoArquivoCreditos + "' está no local correto.");
+    }
 
         // Valida se as listas carregadas têm o mesmo tamanho
         if (codigos.size() == nomes.size() && codigos.size() == professores.size() && codigos.size() == creditos.size()) {
@@ -130,7 +133,7 @@ public class GerenciadorDeMaterias {
     }
 
     /**
-     * Retorna o catálogo completo de matérias.
+     * Retorna o catálogo completo de matérsias.
      *
      * @return mapa código -> matéria
      */

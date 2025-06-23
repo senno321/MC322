@@ -22,6 +22,8 @@ import mc322.materia.Materia;
  * e gerenciamento seguro de senha através de hash.
  */
 public class Usuario {
+    static Usuario usuarioAtual;
+
     private String nome;
     private String email;
     private List<Materia> materias = new ArrayList<>();
@@ -36,6 +38,23 @@ public class Usuario {
      * @param email Email do usuário
      * @param senha Senha em texto plano (será convertida em hash)
      */
+
+    public static Usuario getInstance(){
+        if (usuarioAtual != null) {
+            return usuarioAtual;
+        } else {
+            throw new IllegalStateException("Usuário não está definido.");
+        }
+    }
+
+    public static void innit(String nome, String email, String senha){
+        if (usuarioAtual == null) {
+            usuarioAtual = new Usuario(nome, email, senha);
+        } else {
+            throw new IllegalStateException("Usuário já está definido.");
+        }
+    }
+
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;
