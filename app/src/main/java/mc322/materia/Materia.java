@@ -7,10 +7,7 @@ package mc322.materia;
 import java.util.List;
 import java.util.ArrayList;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /**
@@ -21,8 +18,7 @@ import jakarta.persistence.Id;
 @Entity
 public class Materia {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String code;
     
     private String nome;
     private String professor;
@@ -30,7 +26,7 @@ public class Materia {
     private List<Atividade> listaAtividades;
     private final int creditos;
     private final int limiteFaltas;
-    private String code;
+    
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
