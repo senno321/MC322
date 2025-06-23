@@ -4,6 +4,9 @@
 
 package mc322.evento;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import mc322.materia.Materia;
 
 /**
@@ -15,8 +18,12 @@ import mc322.materia.Materia;
  * eventos
  * do tipo "atividade acadêmica" no sistema.
  */
+@Entity
+@DiscriminatorValue("ATIVIDADE")
 public class EventoAtividade extends CaracteristicaEvento {
+    @ManyToOne 
     private Materia materia; // Matéria relacionada à prova
+
     private double peso; // Peso da nota
     private String conteudo; // Conteúdo que será cobrado
 
@@ -31,6 +38,10 @@ public class EventoAtividade extends CaracteristicaEvento {
         this.materia = materia;
         this.peso = peso;
         this.conteudo = conteudo;
+    }
+
+    public EventoAtividade() {
+        
     }
 
     /**

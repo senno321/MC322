@@ -5,13 +5,13 @@
 package mc322.evento;
 
 import java.time.LocalDateTime;
-import mc322.agendavel.ItemAgendavel;
 
-import jakarta.annotation.Generated;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
+import mc322.agendavel.ItemAgendavel;
 
 /**
  * Representa um evento genérico com informações básicas como nome, local,
@@ -22,15 +22,14 @@ import jakarta.persistence.Id;
  * Essa classe é reutilizável para diferentes contextos (prova, reunião, etc.),
  * dependendo da {@code CaracteristicaEvento} fornecida.
  */
-
- @Entity
+@Entity
+@DiscriminatorValue("EVENTO")
 public class Evento extends ItemAgendavel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String local;
     private int duracao; // em minutos
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "caracteristica_id", referencedColumnName = "id")
     private CaracteristicaEvento caracteristica;
 
     /**
@@ -49,6 +48,10 @@ public class Evento extends ItemAgendavel {
         this.local = local;
         this.duracao = duracao;
         this.caracteristica = caracteristica;
+    }
+
+    public Evento() {
+        
     }
 
     /**

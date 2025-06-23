@@ -4,6 +4,9 @@
 
 package mc322.evento;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
 /**
  * Representa uma reunião como característica de um evento, incluindo
  * participantes,
@@ -13,6 +16,8 @@ package mc322.evento;
  * Essa classe é uma subclasse de {@link CaracteristicaEvento} e é usada
  * para eventos do tipo reunião no sistema.
  */
+@Entity
+@DiscriminatorValue("REUNIAO")
 public class EventoReuniao extends CaracteristicaEvento {
     private String participantes; // Quem participa da reunião
     private String objetivo; // Objetivo da reunião
@@ -30,6 +35,10 @@ public class EventoReuniao extends CaracteristicaEvento {
         this.participantes = participantes;
         this.objetivo = objetivo;
         this.online = online;
+    }
+
+    public EventoReuniao() {
+        
     }
 
     /**

@@ -145,12 +145,15 @@
 
             let nav = 0;
             let clicked = null;
-            const resUser = await fetch("api/getUserSubjects");
-
             let userSubjects = [];
-            if (resUser.ok) {
-                fetch("api/debug");
-                userSubjects = await resUser.json();
+            
+            try {
+                const resUser = await fetch("api/getUserSubjects");
+                if (resUser.ok) {
+                    userSubjects = await resUser.json();
+                }
+            } catch (error) {
+                console.error("Erro ao carregar matérias do usuário:", error);
             }
 
             let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
@@ -275,8 +278,7 @@
                 localStorage.setItem('events', JSON.stringify(events));
                 closeModal();
             }
-
-            // --- LÓGICA CORRIGIDA PARA O MENU LATERAL ---
+            
             function toggleSideMenu(open) {
                 if (open) {
                     sideMenu.classList.add('menu-open');
@@ -296,10 +298,10 @@
                     return;
                 }
                 userSubjects.forEach(subject => {
-                    const absencePercentage = subject.limit > 0 ? (subject.absences / subject.limit) * 100 : 0;
+                    const absencePercentage = subject.limiteFaltas > 0 ? (subject.faltas / subject.limiteFaltas) * 100 : 0;
                     let progressBarColor = 'bg-green-500';
                     if (absencePercentage > 50) progressBarColor = 'bg-yellow-500';
-                    if (absencePercentage > 80) progressBarColor = 'bg-red-500';
+                    if (absencePercentage >= 80) progressBarColor = 'bg-red-500';
                     const card = document.createElement('div');
                     card.className = 'subject-card relative bg-gray-50 p-4 rounded-lg shadow';
                     card.innerHTML = `
@@ -327,67 +329,75 @@
                 setTimeout(() => subjectMessage.textContent = '', 3000);
             }
 
+            // --- FUNÇÃO DE ADICIONAR MATÉRIA ATUALIZADA ---
             async function handleAddSubject(e) {
                 e.preventDefault();
                 const code = subjectCodeInput.value.toUpperCase().trim();
-                if (!code) showSubjectMessage("Por favor, insira um código de matéria.", true);
+                if (!code) {
+                    showSubjectMessage("Por favor, insira um código de matéria.", true);
+                    return;
+                }
 
-
-                if (userSubjects.find(s => s.id === code)) {
+                if (userSubjects.find(s => s.codigo === code)) {
                     showSubjectMessage('Matéria já adicionada!', true);
                     return;
                 }
 
-                try{
-                    const response = await fetch("/api/buscarMateria?codigo=" + code);
-                    if (response.ok){
-                        const materia = await response.json();
+                // Chama a nova API para adicionar no backend
+                try {
+                    const response = await fetch(`/api/adicionarMateriaUsuario?codigo=${code}`, {
+                        method: 'POST'
+                    });
 
-                        if(materia && Object.keys(materia).length > 0) {
-                            const newSubject = {
-                                codigo: materia.codigo,
-                                nome: materia.nome,
-                                professor: materia.professor,
-                                limiteFaltas: materia.limiteFaltas,
-                                faltas: 0
-                            };
-
-                            await fetch("api/debug");
-                            
-                            userSubjects.push(newSubject);
-                            localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
-                            renderSubjects();
-                            subjectCodeInput.value = '';
-                            showSubjectMessage('Matéria adicionada com sucesso!');
-                        }
-                            
+                    if (response.ok) {
+                        const addedSubject = await response.json();
+                        userSubjects.push(addedSubject); // Adiciona na lista local
+                        renderSubjects(); // Atualiza a tela
+                        subjectCodeInput.value = '';
+                        showSubjectMessage('Matéria adicionada com sucesso!');
+                    } else if (response.status === 404) {
+                        showSubjectMessage('Código de matéria não encontrado.', true);
+                    } else if (response.status === 409) {
+                        showSubjectMessage('Matéria já está na sua lista.', true);
+                    } else {
+                        showSubjectMessage('Erro ao adicionar matéria.', true);
                     }
                 } catch (error) {
-                    console.error('Erro ao buscar matéria:', error);
-                    showSubjectMessage('Erro ao buscar matéria. Tente novamente.', true);
+                    console.error('Erro de rede ao adicionar matéria:', error);
+                    showSubjectMessage('Erro de rede. Tente novamente.', true);
                 }
             }
             
-            function handleSubjectListClick(e) {
+            async function handleSubjectListClick(e) {
                 const absenceBtn = e.target.closest('.absence-btn');
                 const removeBtn = e.target.closest('.remove-subject-btn');
+
                 if (absenceBtn) {
-                    const id = absenceBtn.dataset.id;
+                    const codigo = absenceBtn.dataset.id;
                     const action = absenceBtn.dataset.action;
-                    const subject = userSubjects.find(s => s.id === id);
-                    if (subject) {
-                        if (action === 'add' && subject.absences < subject.limit) {
-                            subject.absences++;
-                        } else if (action === 'subtract' && subject.absences > 0) {
-                            subject.absences--;
+                    
+                    try {
+                        const response = await fetch(`/api/atualizarFaltas?codigo=${codigo}&action=${action}`, {
+                            method: 'POST'
+                        });
+
+                        if (response.ok) {
+                            const updatedSubject = await response.json();
+                            const subjectIndex = userSubjects.findIndex(s => s.codigo === codigo);
+                            if (subjectIndex !== -1) {
+                                userSubjects[subjectIndex] = updatedSubject;
+                                renderSubjects(); 
+                            }
+                        } else {
+                            console.error('Falha ao atualizar faltas no servidor.');
+                            showSubjectMessage('Não foi possível atualizar as faltas.', true);
                         }
-                        localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
-                        renderSubjects();
+                    } catch (error) {
+                        console.error('Erro de rede ao atualizar faltas:', error);
                     }
                 } else if (removeBtn) {
-                    const id = removeBtn.dataset.id;
-                    userSubjects = userSubjects.filter(s => s.id !== id);
-                    localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
+                    const codigo = removeBtn.dataset.id;
+                    userSubjects = userSubjects.filter(s => s.codigo !== codigo);
                     renderSubjects();
                 }
             }
@@ -399,7 +409,6 @@
                 document.getElementById('cancelButton').addEventListener('click', closeModal);
                 document.getElementById('eventForm').addEventListener('submit', saveEvent);
                 deleteButton.addEventListener('click', deleteCurrentEvent);
-                // Listeners para abrir e fechar o menu
                 document.getElementById('menuBtn').addEventListener('click', () => toggleSideMenu(true));
                 document.getElementById('closeMenuBtn').addEventListener('click', () => toggleSideMenu(false));
                 menuOverlay.addEventListener('click', () => toggleSideMenu(false));

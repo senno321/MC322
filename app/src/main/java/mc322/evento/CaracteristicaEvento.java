@@ -4,6 +4,8 @@
 
 package mc322.evento;
 
+import jakarta.persistence.*;
+
 /**
  * Classe abstrata que define uma característica genérica de um evento.
  * 
@@ -15,8 +17,13 @@ package mc322.evento;
  * Ela define a interface que todas as características de eventos devem
  * implementar.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TIPO_CARACTERISTICA", discriminatorType = DiscriminatorType.STRING)
 public abstract class CaracteristicaEvento {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     /**
      * Retorna uma descrição textual da característica do evento.
      * 

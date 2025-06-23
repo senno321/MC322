@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 
 /**
  * Representa uma matéria acadêmica com nome, professor responsável, quantidade
@@ -23,7 +25,10 @@ public class Materia {
     private String nome;
     private String professor;
     private int faltas;
+
+    @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Atividade> listaAtividades;
+
     private final int creditos;
     private String codigo;
     private final int limiteFaltas;
@@ -48,6 +53,22 @@ public class Materia {
         this.limiteFaltas = this.getLimiteFaltas();
     }
 
+<<<<<<< HEAD
+=======
+    public Materia() {
+        this.creditos = 0;
+        this.limiteFaltas = 0;
+    }
+
+    /**
+     * Retorna o código da matéria.
+     * 
+     * @return o código da matéria.
+     */
+    public String getCode() {
+        return this.code;
+    }
+>>>>>>> cfaa85f (conserta muita coisa)
 
     /**
      * Retorna o nome da matéria.
