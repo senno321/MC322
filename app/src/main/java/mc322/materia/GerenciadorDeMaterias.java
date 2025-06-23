@@ -53,10 +53,10 @@ public class GerenciadorDeMaterias {
      */
     private void carregarMateriasDosArquivos() {
         // Caminhos relativos dos arquivos de dados dentro de resources
-        String caminhoArquivoCodigos = "mc322/txt/Código_Matérias.txt";
-        String caminhoArquivoNomes = "mc322/txt/Nome_Matérias.txt";
+        String caminhoArquivoCodigos = "mc322/txt/Codigo_Materias.txt";
+        String caminhoArquivoNomes = "mc322/txt/Nome_Materias.txt";
         String caminhoArquivoProfessores = "mc322/txt/Nome_Professores.txt";
-        String caminhoArquivoCreditos = "mc322/txt/Crédito_Matérias.txt";
+        String caminhoArquivoCreditos = "mc322/txt/Credito_Materias.txt";
 
         List<String> codigos = lerArquivoDeTexto(caminhoArquivoCodigos);
         List<String> nomes = lerArquivoDeTexto(caminhoArquivoNomes);
@@ -81,7 +81,7 @@ public class GerenciadorDeMaterias {
                 String professor = professores.get(i);
                 int credito = creditos.get(i);
 
-                Materia novaMateria = new Materia(nome, professor, credito);
+                Materia novaMateria = new Materia(codigo, nome, professor, credito);
                 catalogoMaterias.put(codigo, novaMateria);
             }
             System.out.println("Total de " + catalogoMaterias.size() + " matérias carregadas no catálogo.");

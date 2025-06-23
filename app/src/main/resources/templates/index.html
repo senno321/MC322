@@ -345,11 +345,11 @@
 
                         if(materia && Object.keys(materia).length > 0) {
                             const newSubject = {
-                                id: code,
-                                name: materia.nome,
+                                codigo: materia.codigo,
+                                nome: materia.nome,
                                 professor: materia.professor,
-                                limit: materia.limiteFaltas,
-                                absences: 0
+                                limiteFaltas: materia.limiteFaltas,
+                                faltas: 0
                             };
 
                             await fetch("api/debug");

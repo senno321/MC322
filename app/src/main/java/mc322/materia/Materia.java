@@ -19,6 +19,7 @@ public class Materia {
     private List<Atividade> listaAtividades;
     private final int creditos;
     private int limiteFaltas;
+    private String code;
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
@@ -28,7 +29,8 @@ public class Materia {
      * @param professor nome do professor responsável.
      * @param creditos  quantidade de créditos da matéria.
      */
-    public Materia(String nome, String professor, int creditos) {
+    public Materia(String code, String nome, String professor, int creditos) {
+        this.code = code;
         this.nome = nome;
         this.professor = professor;
         this.faltas = 0;
