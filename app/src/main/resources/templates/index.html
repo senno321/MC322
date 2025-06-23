@@ -303,19 +303,19 @@
                     const card = document.createElement('div');
                     card.className = 'subject-card relative bg-gray-50 p-4 rounded-lg shadow';
                     card.innerHTML = `
-                        <button data-id="${subject.id}" class="remove-subject-btn absolute top-2 right-2 text-gray-400 hover:text-red-500">
+                        <button data-id="${subject.codigo}" class="remove-subject-btn absolute top-2 right-2 text-gray-400 hover:text-red-500">
                             <i class="fas fa-times-circle"></i>
                         </button>
-                        <h3 class="font-bold text-gray-800 pr-4">${subject.name}</h3>
+                        <h3 class="font-bold text-gray-800 pr-4">${subject.nome}</h3>
                         <p class="text-sm text-gray-600 mb-2">${subject.professor}</p>
                         <div class="flex justify-between items-center text-sm mb-1">
                             <span>Faltas</span>
-                            <span>${subject.absences} / ${subject.limit}</span>
+                            <span>${subject.faltas} / ${subject.limiteFaltas}</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="${progressBarColor} h-2.5 rounded-full" style="width: ${absencePercentage}%"></div></div>
                         <div class="flex justify-end mt-3 space-x-2">
-                            <button data-id="${subject.id}" data-action="subtract" class="absence-btn w-8 h-8 bg-red-500 text-white rounded-full btn-hover">-</button>
-                            <button data-id="${subject.id}" data-action="add" class="absence-btn w-8 h-8 bg-green-500 text-white rounded-full btn-hover">+</button>
+                            <button data-id="${subject.codigo}" data-action="subtract" class="absence-btn w-8 h-8 bg-red-500 text-white rounded-full btn-hover">-</button>
+                            <button data-id="${subject.codigo}" data-action="add" class="absence-btn w-8 h-8 bg-green-500 text-white rounded-full btn-hover">+</button>
                         </div>`;
                     subjectList.appendChild(card);
                 });
