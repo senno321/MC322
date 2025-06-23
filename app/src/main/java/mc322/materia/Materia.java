@@ -18,13 +18,14 @@ public class Materia {
     private int faltas;
     private List<Atividade> listaAtividades;
     private final int creditos;
-    private int limiteFaltas;
+    private final int limiteFaltas;
     private String code;
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
      * A lista de atividades é inicializada vazia e as faltas começam em zero.
      * 
+     * @param code      o código da matéria
      * @param nome      nome da matéria.
      * @param professor nome do professor responsável.
      * @param creditos  quantidade de créditos da matéria.
@@ -37,6 +38,15 @@ public class Materia {
         this.creditos = creditos;
         listaAtividades = new ArrayList<>();
         this.limiteFaltas = this.getLimiteFaltas();
+    }
+
+    /**
+     * Retorna o código da matéria.
+     * 
+     * @return o código da matéria.
+     */
+    public String getCode() {
+        return this.code;
     }
 
     /**

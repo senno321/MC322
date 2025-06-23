@@ -32,7 +32,7 @@ class AgendaTest {
 
     @Test
     void testAgendarNovaAtividade() {
-        Materia materia = new Materia("MC322", "Professor X", 4);
+        Materia materia = new Materia("MC322", "MC322", "Professor X", 4);
         usuario.adicionarMateria(materia);
 
         assertDoesNotThrow(() -> agenda.agendarNovaAtividade(usuario, "Prova 1", "Anfiteatro", "25/06/2025", "10:00", 120, "MC322", 10.0, "Toda a matéria"));

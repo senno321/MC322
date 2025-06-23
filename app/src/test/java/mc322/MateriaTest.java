@@ -17,7 +17,7 @@ class MateriaTest {
 
     @BeforeEach
     void setUp() {
-        materia = new Materia("Programação Orientada a Objetos", "Prof. Anonimo", 4);
+        materia = new Materia("MC322", "Programação Orientada a Objetos", "Prof. Anonimo", 4);
     }
 
     @Test

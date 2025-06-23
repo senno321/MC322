@@ -22,7 +22,7 @@ class UsuarioTest {
     @BeforeEach
     void setUp() {
         usuario = new Usuario("Test User", "test@test.com", "password123");
-        materia = new Materia("MC322", "Test Professor", 4);
+        materia = new Materia("MC322", "MC322", "Test Professor", 4);
         evento = EventoFactory.criarEventoReuniao("Reunião de Teste", "Sala 1", "25/12/2024", "10:00", 60, "Equipe", "Discussão de Projeto", false);
     }
 

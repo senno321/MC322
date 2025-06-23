@@ -16,7 +16,7 @@ class EventoFactoryTest {
 
     @Test
     void testCriarEventoAtividade() {
-        Materia materia = new Materia("MC102", "Prof. Y", 6);
+        Materia materia = new Materia("MC102", "MC102", "Prof. Y", 6);
         Evento evento = EventoFactory.criarEventoAtividade(materia, "Prova Final", "CB02", "10/07/2025", "08:00", 120, 10.0, "Tudo");
 
         assertEquals("Prova Final", evento.getNome());
@@ -25,7 +25,7 @@ class EventoFactoryTest {
 
     @Test
     void testCriarEventoDeAtividadeExistente() {
-        Materia materia = new Materia("MC202", "Prof. Z", 4);
+        Materia materia = new Materia("MC202", "MC202", "Prof. Z", 4);
         Atividade atividade = new Atividade("Lab 5", 2.0, "Grafos", LocalDateTime.of(2025, 7, 15, 23, 59));
         Evento evento = EventoFactory.criarEventoDeAtividadeExistente(atividade, materia);
 
@@ -54,7 +54,7 @@ class EventoFactoryTest {
 
     @Test
     void testCriarEventoDataInvalida() {
-        Materia materia = new Materia("Fisica I", "Prof. Einstein", 4);
+        Materia materia = new Materia("F128", "Fisica I", "Prof. Einstein", 4);
         assertThrows(IllegalArgumentException.class, () -> EventoFactory.criarEventoAtividade(materia, "Prova", "Sala 1", "32/01/2025", "10:00", 120, 10, "Mecânica"));
         assertThrows(IllegalArgumentException.class, () -> EventoFactory.criarEventoReuniao("Reunião", "Sala 2", "20/13/2025", "11:00", 60, "Equipe", "Pauta", false));
     }
