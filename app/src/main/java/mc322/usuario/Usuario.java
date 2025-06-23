@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import mc322.evento.Evento;
-import mc322.evento.GerenciadorDeEventos;
+import mc322.agendavel.ItemAgendavel;
+import mc322.evento.EventoFactory;
+import mc322.exceptions.OperationInvalidException;
 import mc322.materia.Atividade;
 import mc322.materia.Materia;
 
 /**
- * Representa um usuário do sistema com nome, email, lista de matérias, eventos
- * e gerenciamento seguro de senha através de hash.
+ * Representa um usuário do sistema com dados pessoais, matérias,
+ * eventos agendados e gerenciamento seguro de senha.
  */
 public class Usuario {
     static Usuario usuarioAtual;
@@ -27,16 +28,15 @@ public class Usuario {
     private String nome;
     private String email;
     private List<Materia> materias = new ArrayList<>();
-    private List<Evento> eventos = new ArrayList<>();
+    private List<ItemAgendavel> itensAgendados = new ArrayList<>();
     private String hashSenha;
 
     /**
-     * Construtor que inicializa usuário com nome, email e senha.
-     * A senha é armazenada de forma segura, como hash.
+     * Constrói um usuário com nome, email e senha (armazenada como hash).
      *
-     * @param nome  Nome do usuário
-     * @param email Email do usuário
-     * @param senha Senha em texto plano (será convertida em hash)
+     * @param nome  nome do usuário
+     * @param email email do usuário
+     * @param senha senha em texto plano, será convertida para hash
      */
 
     public static Usuario getInstance(){
@@ -61,65 +61,41 @@ public class Usuario {
         this.hashSenha = gerarHash(senha);
     }
 
-    /**
-     * Obtém o nome do usuário.
-     *
-     * @return nome do usuário
-     */
+    /** @return o nome do usuário */
     public String getNome() {
         return this.nome;
     }
 
-    /**
-     * Define o nome do usuário.
-     *
-     * @param nome novo nome do usuário
-     */
+    /** Define o nome do usuário */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Obtém o email do usuário.
-     *
-     * @return email do usuário
-     */
+    /** @return o email do usuário */
     public String getEmail() {
         return this.email;
     }
 
-    /**
-     * Define o email do usuário.
-     *
-     * @param email novo email do usuário
-     */
+    /** Define o email do usuário */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     * Retorna a lista de matérias associadas ao usuário.
-     *
-     * @return lista de matérias
-     */
+    /** @return a lista de matérias associadas ao usuário */
     public List<Materia> getMaterias() {
         return this.materias;
     }
 
-    /**
-     * Retorna a lista de eventos do usuário.
-     *
-     * @return lista de eventos
-     */
-    public List<Evento> getEventos() {
-        return this.eventos;
+    /** @return a lista de itens agendados pelo usuário */
+    public List<ItemAgendavel> getItensAgendados() {
+        return this.itensAgendados;
     }
 
     /**
-     * Altera a senha do usuário após verificar se a senha antiga está correta.
+     * Altera a senha se a senha antiga for correta.
      *
-     * @param senhaAntiga senha atual para verificação
-     * @param senhaNova  nova senha que será definida
+     * @param senhaAntiga senha atual para validação
+     * @param senhaNova   nova senha a ser armazenada
      */
     public void setSenha(String senhaAntiga, String senhaNova) {
         if (verificarSenha(senhaAntiga))
@@ -129,9 +105,9 @@ public class Usuario {
     }
 
     /**
-     * Verifica se a senha fornecida corresponde à senha armazenada (hash).
+     * Verifica se a senha fornecida confere com a senha armazenada.
      *
-     * @param tentativa senha em texto plano a ser verificada
+     * @param tentativa senha em texto plano
      * @return true se a senha estiver correta, false caso contrário
      */
     public boolean verificarSenha(String tentativa) {
@@ -142,7 +118,7 @@ public class Usuario {
      * Gera hash SHA-256 codificada em Base64 para a senha informada.
      *
      * @param senha senha em texto plano
-     * @return hash da senha codificado em Base64
+     * @return hash codificado em Base64
      */
     private String gerarHash(String senha) {
         try {
@@ -155,51 +131,66 @@ public class Usuario {
     }
 
     /**
-     * Adiciona um evento à lista de eventos do usuário.
+     * Adiciona um item agendável (evento, lembrete, etc.) ao usuário,
+     * evitando duplicatas.
      *
-     * @param evento evento a ser adicionado
+     * @param item item a adicionar
+     * @throws OperationInvalidException se o item já estiver agendado
      */
-    public void adicionarEvento(Evento evento) {
-        this.eventos.add(evento);
+    public void adicionarItemAgendado(ItemAgendavel item) {
+        if (this.itensAgendados.contains(item)) {
+            throw new OperationInvalidException("Item já está agendado.");
+        }
+        this.itensAgendados.add(item);
     }
 
     /**
-     * Remove um evento da lista de eventos do usuário.
+     * Remove um item agendável do usuário.
      *
-     * @param evento evento a ser removido
+     * @param item item a remover
+     * @throws OperationInvalidException se o item não estiver na lista
      */
-    public void removerEvento(Evento evento) {
-        this.eventos.remove(evento);
+    public void removerItemAgendado(ItemAgendavel item) {
+        if (!this.itensAgendados.remove(item)) {
+            throw new OperationInvalidException("Item não encontrado para remoção.");
+        }
     }
 
     /**
-     * Adiciona uma matéria à lista de matérias do usuário.
+     * Adiciona uma matéria ao usuário.
      *
-     * @param materia matéria a ser adicionada
+     * @param materia matéria a adicionar
+     * @throws OperationInvalidException se a matéria já estiver cadastrada
      */
     public void adicionarMateria(Materia materia) {
+        if (this.materias.contains(materia)) {
+            throw new OperationInvalidException("Item já está agendado.");
+        }
         this.materias.add(materia);
     }
 
     /**
-     * Remove uma matéria da lista de matérias do usuário.
+     * Remove uma matéria do usuário.
      *
-     * @param materia matéria a ser removida
+     * @param materia matéria a remover
+     * @throws OperationInvalidException se a matéria não estiver na lista
      */
     public void removerMateria(Materia materia) {
-        this.materias.remove(materia);
+        if (!this.materias.remove(materia)) {
+            throw new OperationInvalidException("Matéria não encontrada para remoção.");
+        }
     }
 
     /**
-     * Cria uma atividade em uma matéria do usuário, adiciona essa atividade na matéria
-     * e cria um evento correspondente usando o GerenciadorDeEventos.
+     * Cria uma atividade em uma matéria do usuário e adiciona o evento
+     * correspondente.
      *
-     * @param nomeMateria   nome da matéria onde será criada a atividade
+     * @param nomeMateria   nome da matéria
      * @param nomeAtividade nome da atividade
      * @param peso          peso da atividade
-     * @param conteudo      conteúdo cobrado na atividade
-     * @param data          data da atividade no formato "dd/MM/yyyy"
-     * @param horaInicio    hora da atividade no formato "HH:mm"
+     * @param conteudo      conteúdo cobrado
+     * @param data          data no formato "dd/MM/yyyy"
+     * @param horaInicio    hora no formato "HH:mm"
      */
     public void criarAtividade(String nomeMateria, String nomeAtividade, double peso, String conteudo, String data,
             String horaInicio) {
@@ -210,18 +201,17 @@ public class Usuario {
                 LocalDateTime ldt = LocalDateTime.parse(dataHoraInicio, formatter);
                 Atividade atividade = new Atividade(nomeAtividade, peso, conteudo, ldt);
                 m.adicionaAtividade(atividade);
-                GerenciadorDeEventos gerenciador = new GerenciadorDeEventos();
-                gerenciador.criarEvento(this, atividade, m, peso, conteudo);
+                this.itensAgendados.add(EventoFactory.criarEventoDeAtividadeExistente(atividade, m));
             }
         }
     }
 
     /**
-     * Exibe no console os eventos que ocorrem entre as datas fornecidas.
+     * Exibe eventos agendados entre as datas informadas.
      *
-     * @param dataHoraInicio data/hora inicial do intervalo (inclusive)
-     * @param dataHoraFim    data/hora final do intervalo (inclusive)
-     * @throws IllegalArgumentException se as datas forem nulas ou a data inicial for depois da final
+     * @param dataHoraInicio data/hora inicial (inclusive)
+     * @param dataHoraFim    data/hora final (inclusive)
+     * @throws IllegalArgumentException se datas forem nulas ou mal ordenadas
      */
     public void visualizarCalendario(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
 
@@ -233,22 +223,18 @@ public class Usuario {
             throw new IllegalArgumentException("Data de início não pode ser depois da data de fim.");
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        for (ItemAgendavel e : itensAgendados) {
+            LocalDateTime itemAgendadoInicio = e.getDataHoraInicio();
 
-        for (Evento e : eventos) {
-            LocalDateTime eventoInicio = e.getDataHoraInicio();
-
-            if ((!eventoInicio.isBefore(dataHoraInicio)) && (!eventoInicio.isAfter(dataHoraFim))) {
-                System.out.println(" - " + e.getNome() + " às " + eventoInicio.format(formatter));
+            if ((!itemAgendadoInicio.isBefore(dataHoraInicio)) && (!itemAgendadoInicio.isAfter(dataHoraFim))) {
+                System.out.println("Item: " + e.getNome());
+                System.out.println("Data: " + e.getDataHoraFormatada());
+                System.out.println("Detalhes: " + e.getDetalhes());
             }
         }
     }
 
-    /**
-     * Retorna uma string representando o usuário com nome e email.
-     *
-     * @return string representando o usuário
-     */
+    /** @return representação textual do usuário */
     @Override
     public String toString() {
         return "Usuario{nome='" + nome + "', email='" + email + "'}";
