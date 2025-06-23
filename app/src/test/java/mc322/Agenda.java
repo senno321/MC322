@@ -7,9 +7,10 @@ package mc322;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import mc322.agenda.Agenda;
 import mc322.exceptions.OperationInvalidException;
 import mc322.materia.Materia;
-import mc322.servico.Agenda;
 import mc322.usuario.Usuario;
 
 class AgendaTest {

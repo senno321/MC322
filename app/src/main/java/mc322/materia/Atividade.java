@@ -8,11 +8,32 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+import mc322.materia.Materia; // importe a classe Materia
+import jakarta.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonIgnore; // Importante para evitar loops infinitos
+
+
 /**
  * Representa uma atividade acadêmica associada a uma matéria,
  * com nome, peso, conteúdo, data de entrega e status de conclusão.
  */
+@Entity
 public class Atividade {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "materia_id") 
+    @JsonIgnore
+    private Materia materia;
+
     private String nome;
     private double peso;
     private String conteudo;
@@ -34,6 +55,10 @@ public class Atividade {
         this.conteudo = conteudo;
         this.dataDeEntrega = data;
         this.completa = false;
+    }
+
+    public Atividade() {
+        
     }
 
     /**

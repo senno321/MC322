@@ -17,17 +17,44 @@ import mc322.evento.EventoFactory;
 import mc322.exceptions.OperationInvalidException;
 import mc322.materia.Atividade;
 import mc322.materia.Materia;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 /**
  * Representa um usuário do sistema com dados pessoais, matérias,
  * eventos agendados e gerenciamento seguro de senha.
  */
+@Entity
 public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     static Usuario usuarioAtual;
 
-    private String nome;
+    @Column(unique = true, nullable = false)
     private String email;
+
+    private String nome;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+        name = "usuario_materia", // Nome da nova tabela que será criada
+        joinColumns = @JoinColumn(name = "usuario_id"), // Coluna que aponta para o ID do Usuario
+        inverseJoinColumns = @JoinColumn(name = "materia_codigo") // Coluna que aponta para o ID da Materia
+    )
     private List<Materia> materias = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "usuario_id") 
     private List<ItemAgendavel> itensAgendados = new ArrayList<>();
     private String hashSenha;
 
@@ -59,6 +86,10 @@ public class Usuario {
         this.nome = nome;
         this.email = email;
         this.hashSenha = gerarHash(senha);
+    }
+
+    public Usuario() {
+        
     }
 
     /** @return o nome do usuário */

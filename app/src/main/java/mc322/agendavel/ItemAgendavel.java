@@ -8,11 +8,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import jakarta.persistence.*;
+
 /**
  * Classe abstrata que representa um item agendável no calendário,
  * como eventos ou lembretes. Contém nome e data/hora de início.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TIPO_ITEM", discriminatorType = DiscriminatorType.STRING)
 public abstract class ItemAgendavel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /** Nome do item agendável (ex: nome do evento ou lembrete). */
     protected String nome;
@@ -29,6 +37,10 @@ public abstract class ItemAgendavel {
     public ItemAgendavel(String nome, LocalDateTime dataHoraInicio) {
         this.nome = nome;
         this.dataHoraInicio = dataHoraInicio;
+    }
+
+    public ItemAgendavel() {
+        
     }
 
     /**

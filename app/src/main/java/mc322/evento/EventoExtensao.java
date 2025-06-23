@@ -4,6 +4,9 @@
 
 package mc322.evento;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
 /**
  * Representa uma atividade de extensão acadêmica, com informações específicas
  * como descrição, público-alvo, validação de horas e carga horária.
@@ -12,6 +15,8 @@ package mc322.evento;
  * É uma subclasse de {@link CaracteristicaEvento}, sendo usada para marcar
  * eventos que fazem parte de projetos ou programas de extensão universitária.
  */
+@Entity
+@DiscriminatorValue("EXTENSAO")
 public class EventoExtensao extends CaracteristicaEvento {
     private String descricaoAtividade; // Descrição da atividade de extensão
     private String publicoAlvo; // Público-alvo da atividade
@@ -35,6 +40,10 @@ public class EventoExtensao extends CaracteristicaEvento {
         this.publicoAlvo = publicoAlvo;
         this.valeHoras = valeHoras;
         this.cargaHoraria = cargaHoraria;
+    }
+
+    public EventoExtensao() {
+        
     }
 
     /**
