@@ -5,7 +5,9 @@
 package mc322.ui;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mc322.exceptions.OperationInvalidException;
+import mc322.db.MateriaRepository;
 import mc322.materia.GerenciadorDeMaterias;
 import mc322.materia.Materia;
 import mc322.usuario.Usuario;
@@ -24,6 +27,9 @@ import mc322.usuario.Usuario;
  */
 @RestController
 public class APIController {
+
+    @Autowired
+    private MateriaRepository materiaRepository;
 
     /**
      * Endpoint POST para adicionar um evento (simulação).
@@ -46,18 +52,20 @@ public class APIController {
      * existir.
      */
     @GetMapping("/api/buscarMateria")
-    public Materia buscarMateria(@RequestParam String codigo, Model model) {
+    public ResponseEntity<Materia> buscarMateria(@RequestParam String codigo, Model model) {
         System.out.println("Buscando matéria com código: " + codigo);
-        Materia newMateria = GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo(codigo);
-        
-        // Verificação para evitar NullPointerException
-        if (newMateria != null) {
+
+        Optional<Materia> MateriaOptional = materiaRepository.findById(codigo);
+
+        if(MateriaOptional.isPresent()){
+            Materia newMateria = MateriaOptional.get();
             System.out.println("Matéria encontrada: " + newMateria.toString());
-        } else {
-            System.out.println("Nenhuma matéria encontrada com o código: " + codigo);
+            return ResponseEntity.ok(newMateria);
         }
-        
-        return newMateria;
+        else{
+            System.out.println("Matéria com código " + codigo + " não encontrada.");
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/api/debug")

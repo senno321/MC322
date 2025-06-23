@@ -7,24 +7,33 @@ package mc322.materia;
 import java.util.List;
 import java.util.ArrayList;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /**
  * Representa uma matéria acadêmica com nome, professor responsável, quantidade
  * de faltas,
  * lista de atividades e créditos.
  */
+@Entity
 public class Materia {
+    @Id
+    private String code;
+    
     private String nome;
     private String professor;
     private int faltas;
     private List<Atividade> listaAtividades;
     private final int creditos;
-    private int limiteFaltas;
     private String codigo;
+    private final int limiteFaltas;
+    
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
      * A lista de atividades é inicializada vazia e as faltas começam em zero.
      * 
+     * @param code      o código da matéria
      * @param nome      nome da matéria.
      * @param professor nome do professor responsável.
      * @param creditos  quantidade de créditos da matéria.
@@ -38,6 +47,7 @@ public class Materia {
         listaAtividades = new ArrayList<>();
         this.limiteFaltas = this.getLimiteFaltas();
     }
+
 
     /**
      * Retorna o nome da matéria.

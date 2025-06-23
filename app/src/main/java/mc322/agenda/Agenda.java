@@ -2,7 +2,7 @@
  * Material usado na disciplina MC322 - Programação orientada a objetos.
  */
 
-package mc322.servico;
+package mc322.agenda;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

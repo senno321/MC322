@@ -136,6 +136,10 @@ public class GerenciadorDeMaterias {
         return catalogoMaterias;
     }
 
+    public List<Materia> getTodasMaterias() {
+        return new ArrayList<>(catalogoMaterias.values());
+    }
+
     /**
      * Adiciona uma matéria a um usuário com base no código fornecido.
      * Verifica se o código existe no catálogo antes de adicionar.

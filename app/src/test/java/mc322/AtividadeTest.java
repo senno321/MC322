@@ -12,6 +12,9 @@ import mc322.materia.Atividade;
 
 class AtividadeTest {
 
+    /**
+     * Verifica se o construtor e os getters funcionam corretamente.
+     */
     @Test
     void testConstrutorEGetters() {
         LocalDateTime data = LocalDateTime.of(2025, 1, 1, 10, 0);
@@ -24,6 +27,9 @@ class AtividadeTest {
         assertFalse(atividade.getCompleta());
     }
 
+    /**
+     * Verifica se é possível alterar o nome da atividade com valor válido.
+     */
     @Test
     void testSetNomeValido() {
         Atividade atividade = new Atividade("Nome Antigo", 5.0, "Conteúdo", LocalDateTime.now());
@@ -31,6 +37,9 @@ class AtividadeTest {
         assertEquals("Nome Novo", atividade.getNome());
     }
 
+    /**
+     * Verifica se o método setNome lança exceção para valores inválidos.
+     */
     @Test
     void testSetNomeInvalido() {
         Atividade atividade = new Atividade("Nome", 5.0, "Conteúdo", LocalDateTime.now());
@@ -38,6 +47,9 @@ class AtividadeTest {
         assertThrows(IllegalArgumentException.class, () -> atividade.setNome(" "));
     }
 
+    /**
+     * Verifica se o peso pode ser alterado corretamente com valor válido.
+     */
     @Test
     void testSetPesoValido() {
         Atividade atividade = new Atividade("Atividade", 0.0, "Conteúdo", LocalDateTime.now());
@@ -45,12 +57,18 @@ class AtividadeTest {
         assertEquals(10.0, atividade.getPeso());
     }
 
+    /**
+     * Verifica se o método setPeso lança exceção para valor negativo.
+     */
     @Test
     void testSetPesoInvalido() {
         Atividade atividade = new Atividade("Atividade", 5.0, "Conteúdo", LocalDateTime.now());
         assertThrows(IllegalArgumentException.class, () -> atividade.setPeso(-1.0));
     }
 
+    /**
+     * Verifica se a atividade é marcada como concluída corretamente.
+     */
     @Test
     void testMarcarComoConcluida() {
         Atividade atividade = new Atividade("Atividade", 5.0, "Conteúdo", LocalDateTime.now());
