@@ -18,6 +18,7 @@ public class Materia {
     private int faltas;
     private List<Atividade> listaAtividades;
     private final int creditos;
+    private int limiteFaltas;
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
@@ -33,6 +34,7 @@ public class Materia {
         this.faltas = 0;
         this.creditos = creditos;
         listaAtividades = new ArrayList<>();
+        this.limiteFaltas = this.getLimiteFaltas();
     }
 
     /**

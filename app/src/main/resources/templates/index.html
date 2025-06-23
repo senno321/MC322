@@ -141,28 +141,18 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const allSubjectsData = {
-                codes: ["MA013","MA044","MA091","MA104","MA105","MA111","MA141","MA148","MA211","MA220","MA225","MA311","MA327","MA446","MA453","MA456","MA502","MA602","MA621","MA705","MA720","MA726","MA727","MA740","MA811","MA812","MA813","MA814","MA881","MA882","MA883","MA884","MA885","MA886","MA887","MA888","MA889","MA901","MA902","MA903","MA904","ME110","ME111","ME115","ME173","ME176","ME210","ME310","ME322","ME323","ME414","ME607","ME613","ME623","ME630","ME705","ME712","ME714","ME721","ME812","ME820","ME821","ME851","ME852","ME853","ME854","ME855","ME856","ME857","ME858","ME861","ME905","ME951","MS013","MS123","MS149","MS211","MS213","MS380","MS413","MS480","MS512","MS513","MS529","MS550","MS580","MS620","MS712","MS750","MS777","MS778","MS877","MS878","MS891","MS892","MS893","MS894","MS895","MS896","MS897","MS898","MS901","MS905","MS908","MS932","MS991","MS992","MC019","MC020","MC030","MC032","MC033","MC039","MC040","MC041","MC050","MC051","MC102","MC202","MC322","MC358","MC404","MC426","MC458","MC504","MC521","MC536","MC558","MC613","MC646","MC656","MC714","MC721","MC732","MC748","MC750","MC798","MC832","MC833","MC853","MC854","MC855","MC878","MC886","MC889","MC906","MC918","MC920","MC921","MC926","MC934","MC937","MC953","MC964","MC970","MC972","MX011","MX012","MX013","MX014","MX021","MX022","MX061","MX062","MX853","VI104","AM088","F008","F013","F036","F076","F105","F106","F107","F128","F159","F228","F249","F259","F315","F320","F328","F329","F349","F359","F415","F428","F449","F489","F502","F520","F530","F540","F549","F551","F589","F590","F604","F609","F625","F630","F640","F690","F709","F740","F749","F751","F758","F789","F838","F839","F894","F896","F897","F901","F902","F949","FL110","FL210","FL310","FL701","FL801","FM003","FM110","FM201","FM210","FM401","FM701","FM849","FX009","FX013","FX113","FX117"],
-                names: ["Formação para mediação em oficinas de matemática para olimpíadas I","Matemática IV","Matemática Básica","Seminários Sobre o Ensino de Matemática","Matemática Elementar","Cálculo I","Geometria Analítica e Vetores","Fundamentos da Matemática","Cálculo II","Matemática Discreta","Análise de Livros e Materiais Didáticos de Matemática","Cálculo III","Álgebra Linear","Grupos e Representações","Topologia Geral","Equações Diferenciais Ordinárias","Análise I","Análise II","Geometria Espacial","Currículo e Didática da Matemática: Teoria e Prática","Análise no R(n)","Tópicos Distinguidos de Matemática III","Tópicos Distinguidos de Matemática IV","Matemática do Ensino Médio para Professores I","Cultura Matemática I","Cultura Matemática II","Cultura Matemática III","Atividade de Cultura Matemática I","Atividades de Extensão I","Atividades Extensão II","Atividades Extensão III","Atividades Extensão IV","Atividades Extensão V","Atividades Extensão VI","Atividades Extensão VII","Atividades Extensão VIII","Atividades Extensão IX","Estágio Supervisionado I","Estágio Supervisionado II","Iniciação Científica I","Iniciação Científica II","Noções de Estatística","Laboratório de Estatística","Linguagem R","Estatística Descritiva","Introdução à Estatística Vital","Probabilidade I","Probabilidade II","Inferência","Introdução aos Modelos Probabilísticos","Estatística para Experimentalistas","Séries Temporais","Análise de Regressão","Planejamento e Pesquisa","Iniciação Científica I","Inferência Bayesiana","Consultoria Estatística I","Análise de Dados Discretos","Demografia","Consultoria Estatística II","Estágio em Empresa I","Estágio em Empresa II","Atividades de Extensão I","Atividades de Extensão II","Atividades de Extensão III","Atividades de Extensão IV","Atividades de Extensão V","Atividades de Extensão VI","Atividades de Extensão VII","Atividades de Extensão VIII","Análise de Regressão II","Inferência Estatística para Dados de Alta Dimensão","Estatística e Probabilidade I","Construção de oficinas de matemática para olimpíadas I","Elementos de Cálculo","Complementos de Matemática","Cálculo Numérico","Introdução à Matemática Computacional","Matemática Aplicada para Biologia","Algoritmos de otimização convexa","Modelagem Matemática","Análise Numérica I","Laboratório de Computação Científica","Fluxos em Redes","Métodos de Matemática Aplicada I","Introdução à Teoria Fuzzy","Estrutura Matemática do Eletromagnetismo","Análise Numérica III","Métodos de Matemática Aplicada III","Projeto Supervisionado","Projeto de Extensão Supervisonado I","Projeto Supervisionado II","Projeto de Extensão Supervisonado II","Atividades de Extensão I","Atividades de Extensão II","Atividades de Extensão III","Atividades de Extensão IV","Atividades de Extensão V","Atividades de Extensão VI","Atividades de Extensão VII","Atividades de Extensão VIII","Tópicos Especiais de Matemática Aplicada","Tópicos Especiais de Matemática Aplicada V","Tópicos Especiais de Matemática Aplicada VIII","Tópicos em Matemática Aplicada II","Análise Aplicada","Matrizes","Estágio Supervisionado em Ciência da Computação","Estágio Supervisionado em Ciência da Computação II","Projeto Final de Graduação","Estudo Dirigido","Estudo Dirigido II","Seminários sobre Computação e Tecnologia","Estágio de Iniciação Científica I","Estágio de Iniciação Científica II","Monitoria","Monitoria II","Algoritmos e Programação de Computadores","Estruturas de Dados","Programação Orientada a Objetos","Fundamentos Matemáticos da Computação","Organização Básica de Computadores e Linguagem de Montagem","Engenharia de Software","Projeto e Análise de Algoritmos I","Sistemas Operacionais","Desafios de Programação I","Bancos de Dados: Teoria e Prática","Projeto e Análise de Algoritmos II","Laboratório de Circuitos Digitais","Verificação, Validação e Testes de Software","Engenharia de Software","Sistemas Distribuídos","Desafios de Programação III","Projeto de Sistemas Computacionais","Algoritmos de Aproximação","Construção de Interfaces Homem-Computador","Programação Linear Inteira","Redes de Computadores","Programação de Redes de Computadores","Projeto em Sistemas de Programação","Projeto em Computação com Extensão","Projeto em Sistemas de Computação","Teoria e Aplicações de Grafos","Aprendizado de Máquina","Introdução à Criptografia","Introdução à Inteligência Artificial","Tópicos em Teoria da Computação I","Introdução ao Processamento de Imagem Digital","Projeto e Construção de Compiladores","Tópicos em Engenharia de Software I","Tópicos em Engenharia de Computação","Computação Gráfica","Tópicos em Redes de Computadores I","Tópicos em Computação Distribuída","Introdução à Programação Paralela","Tópicos em Arquitetura e Hardware I","Atividades de extensão I","Atividades de extensão II","Atividades de extensão III","Atividades de extensão IV","Atividades de extensão V","Atividades de extensão VI","Atividades de extensão VII","Atividades de extensão VIII","Projeto Integrador Interdisciplinar de Extensão III","Oficina de Informática Básica I","Antropoceno: Desafios da Complexidade Ambiental","Introdução à Física","Tópicos de Física Aplicada III","Tópicos de Astronomia e Astrofísica VI","Tópicos de Física Clássica VI","Física da Fala e Audição","Fundamentos de Física para a Biologia","Física (Biologia)","Física Geral I","Introdução à Física Experimental I","Física Geral II","Óptica Aplicada","Introdução à Física Experimental II","Mecânica Geral I","Termodinâmica","Física Geral III","Física Experimental III","Introdução à Teoria de Informação: Aspectos Clássicos e Quânticos","Introdução à Física Experimental III","Mecânica Geral II","Física Geral IV","Lasers e Aplicações","Estrutura de Matéria II","Eletromagnetismo I","Métodos Matemáticos da Física I","Instrumentação I","Métodos da Física Experimental I","Fontes Alternativas de Energia","Radiação: Interação e Detecção II","Estrutura da Matéria","Iniciação Científica I","Física Estatística","Tópicos de Ensino de Física I","Métodos de Computação Científica I","Instrumentação II","Métodos da Física Experimental II","Iniciação Científica II","Tópicos de Ensino de Física II","Métodos da Física Experimental III","Engenharia de Materiais Estruturados e Dispositivos","Imagens Médicas com Radiação Não-Ionizantes","Radiobiologia e Radioproteção","Mecânica Quântica II","Métodos de Física Experimental VII","Métodos da Física Experimental VI","Projeto de Curso em Engenharia Física","Monografia","Monografia em Ensino de Física I","Estágio Supervisionado I","Estágio Supervisionado II","Estágio em Engenharia Física","Iniciação à Prática de Ensino I","Iniciação à Prática de Ensino II","Iniciação à Prática de Ensino III","Projetos Integrados do Ensino de Física","Práticas de Ensino de Física","Seminários sobre a Profissão","Práticas de Engenharia Física I","Atividades Científico - Culturais I","Práticas de Engenharia Física II","Atividades Científico - Culturais III","Atividades Científico - Culturais VI","Projetos Integrados em Engenharia Física III","Práticas em Empresa Júnior","Atividades de Extensão A3","Tópicos de Extensão III","Tópicos de Extensão VII"],
-                professors: ["João Silva","Mariana Rodrigues","Pedro Henrique Dias","Lucas Almeida Santos","Ana Costa","Carlos Pereira","Beatriz Fernandes","Gustavo Souza Lima","Daniel Rocha","Isabela Mendes","Fernando Lima","Sofia Alves Costa","Rafael Gomes","Maria Eduarda Brito","José Pereira Oliveira","Laura Barbosa","André Conceição Silva","Felipe Carvalho","Antônio Neves","Juliana Ribeiro","Ricardo Pinto","Manuela Moreira","Eduardo Castro Sousa","Camila Morais","Thiago Barros","Larissa Teixeira Santos","Luan Ribeiro","Vitória Rocha","Diego Lima","Letícia Alves","Paulo Costa","Bruna Martins","Mateus Dias Neves","Rafaela Nunes Ribeiro","Vinícius Carvalho","Giovanna Ferreira Moreira","Caio Santana","Yasmin Vieira","Victor Barros Teixeira","Clara Conceição","Leonardo Freitas Ferreira","Helena Rodrigues","Gabriel Fernandes Costa","Alice Oliveira","Guilherme Silva Pereira","Evelyn Mendes","Matheus Rocha Dias","Bianca Nunes","Arthur Teixeira Santana","Julia Conceição","Davi Freitas Rodrigues","Lorena Lima","Miguel Alves Pinto","Sarah Gomes","Enzo Mendes Morais","Lívia Souza","Nicolas Barbosa Santana","Valentina Rocha","Samuel Nunes Vieira","Melissa Carvalho","Bernardo Ferreira Rocha","Isadora Pinto","Murilo Castro Alves","João Pedro Morais","Rebeca Barros Mendes","Lorenzo Teixeira","Stella Santana Conceição","Benjamin Freitas","Liz Ribeiro Neves","Francisco Pinto","Alana Rocha","Theo Lima Moreira","Nicole Alves Castro","Benício Gomes","Bárbara Mendes Teixeira","Calebe Souza","Elisa Barbosa Freitas","João Guilherme Nunes","Olívia Carvalho Ribeiro","Pedro Henrique Ferreira","Mariana Pinto Lima","Heitor Castro Alves","Melina Morais","Noah Barros Teixeira","Antonella Santana","Levi Freitas Vieira","Aurora Ribeiro Neves","João Lucas Pinto","Esther Rocha","Kalel Lima Moreira","Luna Alves Castro","Lucca Gomes","Maria Eduarda Mendes Teixeira","Miguel Souza","Ana Clara Barbosa Freitas","Arthur Rocha","Júlia Nunes Vieira","Davi Carvalho Ribeiro","Manuela Ferreira","Enzo Gabriel Pinto Lima","Beatriz Castro Alves","Gabriel Morais","Lívia Barros Teixeira","João Pedro Neves","Maria Eduarda Ribeiro","Pedro Oliveira Santos","Ana Costa e Silva","Carlos Pereira Filho","Mariana Rodrigues Silva","Lucas Almeida Braga","Beatriz Fernandes Costa","Fernando Lima Júnior","Sofia Alves Moreira","Rafael Gomes Souza","Isabela Mendes Castro","Gustavo Souza Pires","Laura Barbosa Dias","Daniel Rocha Matos","Luiza Martins Neves","Marcelo Dias Pereira","Carolina Nunes Lacerda","Felipe Carvalho Filho","Gabriela Ferreira Campos","Antônio Neves Oliveira","Juliana Ribeiro Faria","Ricardo Pinto Correia","Manuela Moreira Alves","Eduardo Castro Lima","Camila Morais Santos","Thiago Barros Rocha","Larissa Teixeira Gomes","André Conceição Braga","Amanda Santana Alves","Bruno Freitas Costa","Fernanda Vieira Lima","Luan Ribeiro Almeida","Vitória Rocha Castro","Diego Lima Morais","Letícia Alves Pires","José Gomes Nunes","Patrícia Barbosa Pinto","Paulo Costa Faria","Bruna Martins Correia","Mateus Dias Santos","Rafaela Nunes Almeida","Vinícius Carvalho Braga","Giovanna Ferreira Costa","Caio Santana Lima","Yasmin Vieira Morais","Victor Barros Pires","Clara Conceição Nunes","Leonardo Freitas Faria","Helena Rodrigues Correia","Gabriel Fernandes Santos","Alice Oliveira Almeida","Guilherme Silva Braga","Evelyn Mendes Costa","Matheus Rocha Lima","Bianca Nunes Morais","Arthur Teixeira Pires","Julia Conceição Nunes","Davi Freitas Faria","Lorena Lima Correia","Miguel Alves Santos","Sarah Gomes Almeida","Enzo Mendes Braga","Lívia Souza Costa","Nicolas Barbosa Lima","Valentina Rocha Morais","Samuel Nunes Pires","Melissa Carvalho Nunes","Bernardo Ferreira Faria","Isadora Pinto Correia","Murilo Castro Santos","João Pedro Morais Almeida","Rebeca Barros Braga","Lorenzo Teixeira Costa","Stella Santana Lima","Benjamin Freitas Morais","Liz Ribeiro Pires","Francisco Pinto Nunes","Alana Rocha Faria","Theo Lima Correia","Nicole Alves Santos","Benício Gomes Almeida","Bárbara Mendes Braga","Calebe Souza Costa","Elisa Barbosa Lima","João Guilherme Nunes Morais","Olívia Carvalho Pires","Pedro Henrique Ferreira Nunes","Mariana Pinto Faria","Heitor Castro Correia","Melina Morais Santos","Noah Barros Almeida","Antonella Santana Braga","Levi Freitas Costa","Aurora Ribeiro Lima","João Lucas Morais Pires","Esther Conceição Nunes","Kalel Vieira Faria","Luna Ribeiro Correia","Lucca Almeida Santos","Maria Eduarda Braga Costa","Miguel Lima Morais","Ana Clara Pires Nunes","Arthur Faria Correia","Júlia Santos Almeida","Davi Braga Costa","Manuela Lima Morais","Enzo Gabriel Pires Nunes","Beatriz Faria Correia","Gabriel Santos Almeida","Lívia Braga Costa","João Silva Santos","Caleb Santos Rocha","Alice Costa Faria","Benício Alves Correia","Luiza Gomes Almeida","João Miguel Pires","Heloísa Ribeiro Matos","Bernardo Dias Lacerda","Isadora Nunes Campos","Theo Moreira Sales","Elisa Fernandes Castro","Noah Barbosa Lima","Lizandra Rodrigues Silva","Enzo Gabriel Vieira","Valentina Souza Braga","Samuel Teixeira Mendes","Marina Conceição Faria","Arthur Emmanuel Dias","Sophia Cavalcante Porto"],
-                credits: [4,4,6,2,8,6,4,4,6,4,6,6,4,8,8,8,6,4,4,6,8,2,2,6,4,4,4,4,4,4,4,4,2,2,2,2,2,8,8,4,4,4,3,5,4,2,4,4,6,4,4,5,5,5,5,5,12,5,5,12,5,5,2,2,2,2,2,2,2,2,5,5,4,4,4,2,4,4,4,4,4,4,4,4,6,4,4,4,4,4,4,4,4,2,2,2,2,2,2,2,2,4,4,4,2,8,8,12,12,12,6,6,2,12,12,8,8,6,6,4,4,4,4,4,4,4,6,4,4,4,4,4,4,4,4,4,4,4,2,12,12,12,4,4,4,4,4,4,6,4,2,4,4,4,4,4,1,1,1,1,2,2,6,6,12,2,2,6,2,4,4,4,3,4,4,2,4,2,2,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,4,4,2,4,6,4,4,4,2,6,4,4,4,4,4,4,4,8,8,8,10,10,20,4,4,4,8,8,2,2,3,4,2,2,6,4,2,2,2]
-            };
-            
-            const subjectsCatalog = allSubjectsData.codes.reduce((acc, code, index) => {
-                acc[code] = {
-                    id: code,
-                    name: `${code} - ${allSubjectsData.names[index]}`,
-                    professor: allSubjectsData.professors[index],
-                    credits: allSubjectsData.credits[index],
-                    limit: allSubjectsData.credits[index] * 2,
-                };
-                return acc;
-            }, {});
+        document.addEventListener('DOMContentLoaded', async function () {
 
             let nav = 0;
             let clicked = null;
-            let userSubjects = localStorage.getItem('userSubjects') ? JSON.parse(localStorage.getItem('userSubjects')) : [];
+            const resUser = await fetch("api/getUserSubjects");
+
+            let userSubjects = [];
+            if (resUser.ok) {
+                fetch("api/debug");
+                userSubjects = await resUser.json();
+            }
+
             let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
 
             const calendar = document.getElementById('calendar');
@@ -337,27 +327,44 @@
                 setTimeout(() => subjectMessage.textContent = '', 3000);
             }
 
-            function handleAddSubject(e) {
+            async function handleAddSubject(e) {
                 e.preventDefault();
                 const code = subjectCodeInput.value.toUpperCase().trim();
-                if (!code) return;
+                if (!code) showSubjectMessage("Por favor, insira um código de matéria.", true);
+
+
                 if (userSubjects.find(s => s.id === code)) {
                     showSubjectMessage('Matéria já adicionada!', true);
                     return;
                 }
 
-                const subjectFromCatalog = subjectsCatalog[code];
-                
+                try{
+                    const response = await fetch("/api/buscarMateria?codigo=" + code);
+                    if (response.ok){
+                        const materia = await response.json();
 
-                if (subjectFromCatalog) {
-                    const newSubject = { ...subjectFromCatalog, absences: 0 };
-                    userSubjects.push(newSubject);
-                    localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
-                    renderSubjects();
-                    subjectCodeInput.value = '';
-                    showSubjectMessage('Matéria adicionada com sucesso!');
-                } else {
-                    showSubjectMessage('Código da matéria não encontrado.', true);
+                        if(materia && Object.keys(materia).length > 0) {
+                            const newSubject = {
+                                id: code,
+                                name: materia.nome,
+                                professor: materia.professor,
+                                limit: materia.limiteFaltas,
+                                absences: 0
+                            };
+
+                            await fetch("api/debug");
+                            
+                            userSubjects.push(newSubject);
+                            localStorage.setItem('userSubjects', JSON.stringify(userSubjects));
+                            renderSubjects();
+                            subjectCodeInput.value = '';
+                            showSubjectMessage('Matéria adicionada com sucesso!');
+                        }
+                            
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar matéria:', error);
+                    showSubjectMessage('Erro ao buscar matéria. Tente novamente.', true);
                 }
             }
             

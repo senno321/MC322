@@ -5,6 +5,11 @@
 package mc322.ui;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
+import mc322.materia.GerenciadorDeMaterias;
+import mc322.usuario.Usuario;
+
 import org.springframework.boot.SpringApplication;
 
 /**
@@ -32,6 +37,13 @@ public class App {
      * @param args argumentos de linha de comando (não utilizados).
      */
     public static void main(String[] args) {
+        //Debuga as paradas
+        System.out.println(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211")); 
+        
+        //Setando o usuario atual e os gerenciadores.
+        Usuario.innit("Testador", "test123@gmail.com", "12345");
+        Usuario.getInstance().adicionarMateria(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211"));
+        //Inicia a aplicação Spring Boot
         SpringApplication.run(App.class, args);
     }
 }
