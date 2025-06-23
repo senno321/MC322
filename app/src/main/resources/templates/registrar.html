@@ -80,7 +80,7 @@
                 if (response.status === 201) { // 201 Created
                     console.log('Registro bem-sucedido!');
                     // Redireciona para a página de login após o sucesso
-                    fetch('/')
+                    window.location.href = '/'; 
                 } else {
                     const errorText = await response.text();
                     errorMessageDiv.textContent = errorText;
