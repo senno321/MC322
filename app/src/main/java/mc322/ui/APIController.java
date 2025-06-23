@@ -130,6 +130,4 @@ public class APIController {
             return ResponseEntity.status(409).body(materiaParaAdicionar); // 409: Conflito (já existe)
         }
     }
-
-
 }

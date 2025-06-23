@@ -25,8 +25,18 @@ public class AppController {
      * @return nome da view a ser renderizada ("index").
      */
     @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("mensagem", "Bem-vindo ao meu site com Spring Boot!");
-        return "index";
+    public String loginPage(Model model) {
+        return "login"; 
     }
+
+    @GetMapping("/main")
+    public String indexPage(Model model) {
+        return "index"; 
+    }
+
+    @GetMapping("/registrar")
+    public String registrarPage(Model model) {
+        return "registrar";
+    }
+
 }

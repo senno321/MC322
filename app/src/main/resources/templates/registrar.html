@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar - Minha Agenda</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body{display:flex;justify-content:center;align-items:center;height:100vh;margin:0;font-family:'Roboto',sans-serif}.register-container{background-color:var(--oxford-blue);padding:2.5rem 3rem;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,.4);width:100%;max-width:420px;text-align:center;border:1px solid var(--yale-blue)}.register-container h1{color:var(--platinum);margin-top:0;margin-bottom:1.5rem;font-size:2.2rem;font-weight:700}.form-group{margin-bottom:1.2rem;text-align:left}.form-group label{display:block;margin-bottom:.5rem;color:var(--silver-lake-blue);font-size:.9rem;font-weight:500}input[type=text],input[type=email],input[type=password]{width:100%;box-sizing:border-box;padding:.8rem 1rem;font-size:1rem}button{width:100%;padding:.8rem 1rem;font-size:1.1rem;font-weight:700;margin-top:1rem}.footer-text{margin-top:2rem;font-size:.9rem;color:var(--silver-lake-blue)}.footer-text a{color:var(--platinum);text-decoration:none;font-weight:500}.footer-text a:hover{text-decoration:underline}#error-message{color:#ff4d4d;background-color:rgba(255,77,77,0.1);border:1px solid #ff4d4d;padding:10px;border-radius:8px;margin-bottom:1rem;display:none;font-size:.9rem}
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <form id="registerForm">
+            <h1>Criar Conta</h1>
+
+            <!-- Elemento para exibir mensagens de erro -->
+            <div id="errorMessage"></div>
+            
+            <div class="form-group">
+                <label for="fullname">Nome Completo</label>
+                <input type="text" id="fullname" name="nome" placeholder="Digite seu nome completo" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="senha" placeholder="Crie uma senha forte" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirmar Senha</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirme sua senha" required>
+            </div>
+            <button type="submit">Registrar</button>
+        </form>
+        <div class="footer-text">
+            <span>Já tem uma conta? <a href="/">Faça login</a></span>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            // Validação de cliente
+            if (password !== confirmPassword) {
+                errorMessageDiv.textContent = 'As senhas não coincidem.';
+                errorMessageDiv.style.display = 'block';
+                return;
+            }
+
+            // Os nomes dos campos (nome, email, senha) devem corresponder
+            // aos atributos da classe Usuario em Java.
+            const userData = {
+                nome: fullname,
+                email: email,
+                senha: password
+            };
+
+            try {
+                const response = await fetch('/api/usuario/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.status === 201) { // 201 Created
+                    console.log('Registro bem-sucedido!');
+                    // Redireciona para a página de login após o sucesso
+                    fetch('/')
+                } else {
+                    const errorText = await response.text();
+                    errorMessageDiv.textContent = errorText;
+                    errorMessageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro ao tentar registrar:', error);
+                errorMessageDiv.textContent = 'Não foi possível conectar ao servidor. Tente novamente mais tarde.';
+                errorMessageDiv.style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+</html>
