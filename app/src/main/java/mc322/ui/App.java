@@ -6,7 +6,6 @@ package mc322.ui;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 import mc322.materia.GerenciadorDeMaterias;
 import mc322.usuario.Usuario;
 
@@ -16,7 +15,7 @@ import org.springframework.boot.SpringApplication;
  * Contém a estrutura de implementação da aplicação.
  * 
  * @author Bruno Medeiros Saback - 281746
- * @author Lucas
+ * @author Lucas Cabral Senno - 281816
  * @author Filipe de Souza Lalic - 288884
  * @author Kauan Cunha da Silva - 240030
  * 
