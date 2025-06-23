@@ -7,12 +7,23 @@ package mc322.materia;
 import java.util.List;
 import java.util.ArrayList;
 
+import jakarta.annotation.Generated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Representa uma matéria acadêmica com nome, professor responsável, quantidade
  * de faltas,
  * lista de atividades e créditos.
  */
+@Entity
 public class Materia {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String nome;
     private String professor;
     private int faltas;

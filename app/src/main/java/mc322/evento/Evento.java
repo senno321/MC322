@@ -7,6 +7,12 @@ package mc322.evento;
 import java.time.LocalDateTime;
 import mc322.agendavel.ItemAgendavel;
 
+import jakarta.annotation.Generated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Representa um evento genérico com informações básicas como nome, local,
  * data, duração e uma {@link CaracteristicaEvento} que define seu tipo
@@ -16,7 +22,13 @@ import mc322.agendavel.ItemAgendavel;
  * Essa classe é reutilizável para diferentes contextos (prova, reunião, etc.),
  * dependendo da {@code CaracteristicaEvento} fornecida.
  */
+
+ @Entity
 public class Evento extends ItemAgendavel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String local;
     private int duracao; // em minutos
     private CaracteristicaEvento caracteristica;
