@@ -19,7 +19,7 @@ public class Materia {
     private List<Atividade> listaAtividades;
     private final int creditos;
     private int limiteFaltas;
-    private String code;
+    private String codigo;
 
     /**
      * Construtor que inicializa uma matéria com nome, professor e créditos.
@@ -29,8 +29,8 @@ public class Materia {
      * @param professor nome do professor responsável.
      * @param creditos  quantidade de créditos da matéria.
      */
-    public Materia(String code, String nome, String professor, int creditos) {
-        this.code = code;
+    public Materia(String codigo, String nome, String professor, int creditos) {
+        this.codigo = codigo;
         this.nome = nome;
         this.professor = professor;
         this.faltas = 0;
@@ -46,6 +46,25 @@ public class Materia {
      */
     public String getNome() {
         return this.nome;
+    }
+
+    
+    /**
+     * Retorna o código da matéria.
+     * 
+     * @return código da matéria.
+     */
+    public String getCodigo() {
+        return this.codigo;
+    }
+
+    /**
+     * Define o nome da matéria.
+     * 
+     * @param nome novo nome da matéria.
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     /**
