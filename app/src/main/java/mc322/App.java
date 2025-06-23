@@ -2,7 +2,7 @@
  * Material usado na disciplina MC322 - Programação orientada a objetos.
  */
 
-package mc322.ui;
+package mc322;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -20,7 +20,7 @@ import jakarta.persistence.CascadeType;
 @Entity
 public class Materia {
     @Id
-    private String code;
+    private String codigo;
     
     private String nome;
     private String professor;
@@ -30,7 +30,6 @@ public class Materia {
     private List<Atividade> listaAtividades;
 
     private final int creditos;
-    private String codigo;
     private final int limiteFaltas;
     
 
@@ -53,22 +52,10 @@ public class Materia {
         this.limiteFaltas = this.getLimiteFaltas();
     }
 
-<<<<<<< HEAD
-=======
     public Materia() {
         this.creditos = 0;
         this.limiteFaltas = 0;
     }
-
-    /**
-     * Retorna o código da matéria.
-     * 
-     * @return o código da matéria.
-     */
-    public String getCode() {
-        return this.code;
-    }
->>>>>>> cfaa85f (conserta muita coisa)
 
     /**
      * Retorna o nome da matéria.
