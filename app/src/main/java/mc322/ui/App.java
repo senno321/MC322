@@ -2,7 +2,7 @@
  * Material usado na disciplina MC322 - Programação orientada a objetos.
  */
 
-package mc322.ui;
+package mc322;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -37,7 +37,7 @@ public class App {
      */
     public static void main(String[] args) {
         //Debuga as paradas
-        System.out.println(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211")); 
+        // System.out.println(GerenciadorDeMaterias.getInstance().buscarMateriaPorCodigo("MA211")); 
         
         //Setando o usuario atual e os gerenciadores.
         Usuario.innit("Testador", "test123@gmail.com", "12345");
