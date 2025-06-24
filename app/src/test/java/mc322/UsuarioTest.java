@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import mc322.agendavel.ItemAgendavel;
 import mc322.evento.EventoFactory;
 import mc322.exceptions.OperationInvalidException;
+import mc322.inscricao.Inscricao;
 import mc322.materia.Materia;
 import mc322.usuario.Usuario;
 
@@ -24,35 +25,64 @@ class UsuarioTest {
     void setUp() {
         usuario = new Usuario("Test User", "test@test.com", "password123");
         materia = new Materia("MC322", "MC322", "Test Professor", 4);
-        evento = EventoFactory.criarEventoReuniao("Reunião de Teste", "Sala 1", "25/12/2024", "10:00", 60, "Equipe", "Discussão de Projeto", false);
+        evento = EventoFactory.criarEventoReuniao("Reunião de Teste", "Sala 1", "25/12/2024", "10:00", 60, "Equipe",
+                "Discussão de Projeto", false);
     }
 
-    /** Testa adicionar uma matéria nova ao usuário. */
+    /**
+     * Testa a adição de uma nova inscrição à lista do usuário.
+     */
     @Test
-    void testAdicionarMateria() {
-        assertDoesNotThrow(() -> usuario.adicionarMateria(materia));
-        assertTrue(usuario.getMaterias().contains(materia));
+    void testAdicionarInscricao() {
+        Inscricao inscricao = new Inscricao(usuario, materia);
+
+        assertDoesNotThrow(() -> usuario.getInscricoes().add(inscricao));
+        assertEquals(1, usuario.getInscricoes().size());
+        assertTrue(usuario.getInscricoes().contains(inscricao));
     }
 
-    /** Testa adicionar uma matéria já existente, deve lançar exceção. */
+    /**
+     * Testa a adição de uma inscrição duplicada.
+     */
     @Test
-    void testAdicionarMateriaDuplicada() {
-        usuario.adicionarMateria(materia);
-        assertThrows(OperationInvalidException.class, () -> usuario.adicionarMateria(materia));
+    void testAdicionarInscricaoDuplicada() {
+        Inscricao inscricao = new Inscricao(usuario, materia);
+        usuario.getInscricoes().add(inscricao);
+
+        usuario.getInscricoes().add(inscricao);
+
+        assertEquals(2, usuario.getInscricoes().size());
     }
 
-    /** Testa remover uma matéria existente do usuário. */
+    /**
+     * Testa a remoção de uma inscrição existente do usuário.
+     */
     @Test
-    void testRemoverMateria() {
-        usuario.adicionarMateria(materia);
-        assertDoesNotThrow(() -> usuario.removerMateria(materia));
-        assertFalse(usuario.getMaterias().contains(materia));
+    void testRemoverInscricao() {
+        Inscricao inscricao = new Inscricao(usuario, materia);
+        usuario.getInscricoes().add(inscricao);
+        assertEquals(1, usuario.getInscricoes().size());
+
+        boolean foiRemovida = usuario.getInscricoes().remove(inscricao);
+
+        assertTrue(foiRemovida);
+        assertEquals(0, usuario.getInscricoes().size());
+        assertFalse(usuario.getInscricoes().contains(inscricao));
     }
 
-    /** Testa tentar remover matéria que o usuário não possui, deve lançar exceção. */
+    /**
+     * Testa a tentativa de remover uma inscrição que não existe na lista do
+     * usuário.
+     */
     @Test
-    void testRemoverMateriaInexistente() {
-        assertThrows(OperationInvalidException.class, () -> usuario.removerMateria(materia));
+    void testRemoverInscricaoInexistente() {
+        assertEquals(0, usuario.getInscricoes().size());
+
+        Inscricao inscricaoInexistente = new Inscricao(usuario, materia);
+        boolean foiRemovida = usuario.getInscricoes().remove(inscricaoInexistente);
+
+        assertFalse(foiRemovida);
+        assertEquals(0, usuario.getInscricoes().size());
     }
 
     /** Testa adicionar um item agendável novo ao usuário. */

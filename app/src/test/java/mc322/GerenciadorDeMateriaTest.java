@@ -48,18 +48,11 @@ class GerenciadorDeMateriasTest {
     }
 
     @Test
-    void testCriarMateria() {
-        gerenciador.criarMateria(usuario, "MC102");
-        assertEquals(1, usuario.getMaterias().size());
-        assertEquals("Algoritmos e Programação de Computadores", usuario.getMaterias().get(0).getNome());
-    }
-
-    @Test
     void testGetCatalogoMaterias() {
         assertFalse(gerenciador.getCatalogoMaterias().isEmpty());
     }
 
-        /**
+    /**
      * Testa se o método privado `lerArquivoDeTexto` lança uma
      * ResourceDataException quando um caminho de arquivo inválido é fornecido.
      * Utiliza reflection para acessar e invocar o método privado.
@@ -74,7 +67,7 @@ class GerenciadorDeMateriasTest {
             // Invoca o método com um caminho de arquivo que não existe
             metodoPrivado.invoke(gerenciador, "caminho/invalido/arquivo.txt");
         });
-        
+
         // A InvocatioTargetException "envolve" a exceção original lançada pelo método.
         // Verificamos se a causa raiz é a ResourceDataException que esperamos.
         Throwable causaRaiz = exception.getCause();

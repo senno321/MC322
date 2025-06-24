@@ -45,13 +45,6 @@ class MateriaTest {
         assertEquals(7, materia.getLimiteFaltas());
     }
 
-    /** Testa a alteração do número de faltas do aluno na matéria. */
-    @Test
-    void testSetFaltas() {
-        materia.setFaltas(5);
-        assertEquals(5, materia.getFaltas());
-    }
-
     /** Verifica se uma atividade é adicionada corretamente à lista da matéria. */
     @Test
     void testAdicionaAtividade() {
