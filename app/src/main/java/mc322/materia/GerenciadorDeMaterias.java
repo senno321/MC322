@@ -140,22 +140,4 @@ public class GerenciadorDeMaterias {
     public List<Materia> getTodasMaterias() {
         return new ArrayList<>(catalogoMaterias.values());
     }
-
-    /**
-     * Adiciona uma matéria a um usuário com base no código fornecido.
-     * Verifica se o código existe no catálogo antes de adicionar.
-     *
-     * @param usuario       usuário que receberá a matéria
-     * @param codigoMateria código da matéria desejada
-     */
-    public void criarMateria(Usuario usuario, String codigoMateria) {
-        Materia materia = catalogoMaterias.get(codigoMateria);
-
-        if (materia != null) {
-            usuario.adicionarMateria(materia);
-            System.out.println("Matéria adicionada ao usuário: " + materia.getNome());
-        } else {
-            System.err.println("Código não encontrado no catálogo: " + codigoMateria);
-        }
-    }
 }

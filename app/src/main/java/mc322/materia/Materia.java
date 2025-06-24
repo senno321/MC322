@@ -26,7 +26,6 @@ public class Materia {
     
     private String nome;
     private String professor;
-    private int faltas;
 
     @OneToMany(mappedBy = "materia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Atividade> listaAtividades;
@@ -48,7 +47,6 @@ public class Materia {
         this.codigo = codigo;
         this.nome = nome;
         this.professor = professor;
-        this.faltas = 0;
         this.creditos = creditos;
         listaAtividades = new ArrayList<>();
         this.limiteFaltas = this.getLimiteFaltas();
@@ -97,24 +95,6 @@ public class Materia {
     }
 
     /**
-     * Retorna a quantidade atual de faltas do aluno na matéria.
-     * 
-     * @return número de faltas.
-     */
-    public int getFaltas() {
-        return this.faltas;
-    }
-
-    /**
-     * Define a quantidade de faltas do aluno na matéria.
-     * 
-     * @param faltas nova quantidade de faltas.
-     */
-    public void setFaltas(int faltas) {
-        this.faltas = faltas;
-    }
-
-    /**
      * Retorna a quantidade de créditos da matéria.
      * 
      * @return número de créditos.
@@ -159,7 +139,7 @@ public class Materia {
      */
     @Override
     public String toString() {
-        return "Materia [Nome: " + nome + ", Professor: " + professor + ", Faltas: " + faltas + "/"
+        return "Materia [Nome: " + nome + ", Professor: " + professor 
                 + this.getLimiteFaltas() + "]";
     }
 

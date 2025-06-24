@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import mc322.exceptions.OperationInvalidException;
 import mc322.agendavel.ItemAgendavel;
 import mc322.db.ItemAgendavelRepository;
 import mc322.db.MateriaRepository;
 import mc322.db.UsuarioRepository;
 import mc322.evento.Evento;
 import mc322.evento.EventoFactory;
-import mc322.materia.GerenciadorDeMaterias;
+import mc322.inscricao.Inscricao;
 import mc322.materia.Materia;
 import mc322.usuario.Usuario;
 
@@ -101,46 +101,53 @@ public class APIController {
      * @return lista de matérias do usuário atual ou erro apropriado.
      */
     @GetMapping("api/getUserSubjects")
-    public ResponseEntity<List<Materia>> getUserSubjects(Model model) {
+    public ResponseEntity<List<Map<String, Object>>> getUserSubjects(Model model) {
         System.out.println("Buscando matérias do usuário atual");
+        Usuario usuarioAtual = usuarioRepository.findById(Usuario.getInstance().getId()).orElse(null);
 
-        try {
-            Usuario usuarioSingleton = Usuario.getInstance();
-
-            Usuario usuarioAtual = usuarioRepository.findById(usuarioSingleton.getId()).orElse(null);
-
-            if (usuarioAtual == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-
-            List<Materia> materias = new ArrayList<>(usuarioAtual.getMaterias());
-            System.out.println("Matérias encontradas: " + materias.size());
-            return ResponseEntity.ok(materias);
-
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        if (usuarioAtual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        // Transforma a lista de Inscrições em uma lista de Mapas (DTOs) para o frontend
+        List<Map<String, Object>> materiasDTO = usuarioAtual.getInscricoes().stream().map(inscricao -> {
+            Materia m = inscricao.getMateria();
+            Map<String, Object> dto = new java.util.HashMap<>();
+            dto.put("codigo", m.getCodigo());
+            dto.put("nome", m.getNome());
+            dto.put("professor", m.getProfessor());
+            dto.put("creditos", m.getCreditos());
+            dto.put("limiteFaltas", m.getLimiteFaltas());
+            dto.put("faltas", inscricao.getFaltas()); // A falta vem da Inscrição!
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(materiasDTO);
     }
 
     @PostMapping("/api/atualizarFaltas")
-    public ResponseEntity<Materia> atualizarFaltas(@RequestParam String codigo, @RequestParam String action) {
-        Usuario usuario = Usuario.getInstance();
-        boolean adicionar = "add".equals(action);
+    public ResponseEntity<?> atualizarFaltas(@RequestParam String codigo, @RequestParam String action) {
+        Usuario usuarioAtual = usuarioRepository.findById(Usuario.getInstance().getId()).orElse(null);
+        if (usuarioAtual == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        for (Materia materia : usuario.getMaterias()) {
-            if (materia.getCodigo().equals(codigo)) {
-                int faltasAtuais = materia.getFaltas();
-                
-                if (adicionar) {
-                    materia.setFaltas(faltasAtuais + 1);
-                } else {
-                    if (faltasAtuais > 0) {
-                        materia.setFaltas(faltasAtuais - 1);
-                    }
+        // Encontra a inscrição específica para esta matéria e usuário
+        Optional<Inscricao> inscricaoOpt = usuarioAtual.getInscricoes().stream()
+                .filter(i -> i.getMateria().getCodigo().equals(codigo))
+                .findFirst();
+
+        if (inscricaoOpt.isPresent()) {
+            Inscricao inscricao = inscricaoOpt.get();
+            int faltasAtuais = inscricao.getFaltas();
+            if ("add".equals(action)) {
+                inscricao.setFaltas(faltasAtuais + 1);
+            } else {
+                if (faltasAtuais > 0) {
+                    inscricao.setFaltas(faltasAtuais - 1);
                 }
-                System.out.println("Faltas para " + codigo + " atualizadas para: " + materia.getFaltas());
-                return ResponseEntity.ok(materia); 
             }
+            usuarioRepository.save(usuarioAtual); // Salva o usuário, que cascata para a inscrição
+            System.out.println("Faltas para " + codigo + " atualizadas para: " + inscricao.getFaltas());
+            return ResponseEntity.ok(Map.of("faltas", inscricao.getFaltas())); // Retorna só a info necessária
         }
 
         return ResponseEntity.notFound().build();
@@ -153,34 +160,30 @@ public class APIController {
      * @return ResponseEntity com a matéria adicionada ou erro apropriado.
      */
     @PostMapping("/api/adicionarMateriaUsuario")
-    public ResponseEntity<Materia> adicionarMateriaUsuario(@RequestParam String codigo) {
-        Optional<Materia> materiaOptional = materiaRepository.findById(codigo);
+    public ResponseEntity<?> adicionarMateriaUsuario(@RequestParam String codigo) {
+        Usuario usuarioAtual = usuarioRepository.findById(Usuario.getInstance().getId()).orElse(null);
+        if (usuarioAtual == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        if (materiaOptional.isEmpty()) {
+        // Verifica se o usuário já está inscrito na matéria
+        boolean jaInscrito = usuarioAtual.getInscricoes().stream()
+                .anyMatch(i -> i.getMateria().getCodigo().equals(codigo));
+        if (jaInscrito) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já inscrito nesta matéria.");
+        }
+        
+        Optional<Materia> materiaOpt = materiaRepository.findById(codigo);
+        if (materiaOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Materia materiaParaAdicionar = materiaOptional.get();
 
-        Usuario usuarioSingleton = Usuario.getInstance();
-
-        Usuario usuarioAtual = usuarioRepository.findById(usuarioSingleton.getId()).orElse(null);
-        if (usuarioAtual == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (usuarioAtual.getMaterias().contains(materiaParaAdicionar)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(materiaParaAdicionar);
-        }
-
-        usuarioAtual.adicionarMateria(materiaParaAdicionar);
-
-        Usuario usuarioSalvo = usuarioRepository.save(usuarioAtual);
-
-        Usuario.setUsuarioAtual(usuarioSalvo);
+        // Cria a nova inscrição e a associa ao usuário e à matéria
+        Inscricao novaInscricao = new Inscricao(usuarioAtual, materiaOpt.get());
+        usuarioAtual.getInscricoes().add(novaInscricao);
+        
+        usuarioRepository.save(usuarioAtual);
 
         System.out.println("Matéria " + codigo + " adicionada ao usuário " + usuarioAtual.getEmail());
-        
-        return ResponseEntity.ok(materiaParaAdicionar);
+        return ResponseEntity.ok(materiaOpt.get()); // Retorna a matéria para o frontend
     }
 
     /**
@@ -191,31 +194,19 @@ public class APIController {
      */
     @PostMapping("/api/removerMateriaUsuario")
     public ResponseEntity<String> removerMateriaUsuario(@RequestParam String codigo) {
-        try {
-            Usuario usuarioSingleton = Usuario.getInstance();
-            
-            Usuario usuarioAtual = usuarioRepository.findById(usuarioSingleton.getId()).orElse(null);
+        Usuario usuarioAtual = usuarioRepository.findById(Usuario.getInstance().getId()).orElse(null);
+        if (usuarioAtual == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-            if (usuarioAtual == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado.");
-            }
-
-            boolean foiRemovida = usuarioAtual.getMaterias().removeIf(materia -> materia.getCodigo().equals(codigo));
-
-            if (foiRemovida) {
-                Usuario usuarioSalvo = usuarioRepository.save(usuarioAtual);
-                
-                Usuario.setUsuarioAtual(usuarioSalvo);
-                
-                System.out.println("Matéria " + codigo + " removida do usuário " + usuarioAtual.getEmail());
-                return ResponseEntity.ok("Matéria removida com sucesso.");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria não encontrada na lista do usuário.");
-            }
-
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sessão de usuário inválida.");
+        // Remove a inscrição da lista do usuário
+        boolean foiRemovida = usuarioAtual.getInscricoes()
+                .removeIf(inscricao -> inscricao.getMateria().getCodigo().equals(codigo));
+        
+        if (foiRemovida) {
+            usuarioRepository.save(usuarioAtual);
+            return ResponseEntity.ok("Matéria removida com sucesso.");
         }
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Matéria não encontrada na lista do usuário.");
     }
     /**
      * Retorna a lista de todos os itens agendáveis (eventos) para o usuário logado.

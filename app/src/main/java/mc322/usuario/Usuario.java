@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import mc322.agendavel.ItemAgendavel;
 import mc322.evento.EventoFactory;
 import mc322.exceptions.OperationInvalidException;
+import mc322.inscricao.Inscricao;
 import mc322.materia.Atividade;
 import mc322.materia.Materia;
 import jakarta.persistence.CascadeType;
@@ -25,8 +28,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 /**
@@ -46,18 +47,14 @@ public class Usuario {
 
     private String nome;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER) // ADICIONE O FETCHTYPE AQUI
-    @JoinTable(
-        name = "usuario_materia",
-        joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "materia_codigo")
-    )
-    private List<Materia> materias = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id") 
     private List<ItemAgendavel> itensAgendados = new ArrayList<>();
     private String hashSenha;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference // Ajuda a gerenciar a serialização
+    private List<Inscricao> inscricoes = new ArrayList<>();
 
     /**
      * Constrói um usuário com nome, email e senha (armazenada como hash).
@@ -74,19 +71,10 @@ public class Usuario {
             throw new IllegalStateException("Usuário não está definido.");
         }
     }
-    
 
     public static void setUsuarioAtual(Usuario usuario) {
         usuarioAtual = usuario;
     }
-
-    // public static void innit(String nome, String email, String senha){
-    //     if (usuarioAtual == null) {
-    //         usuarioAtual = new Usuario(nome, email, senha);
-    //     } else {
-    //         throw new IllegalStateException("Usuário já está definido.");
-    //     }
-    // }
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
@@ -122,10 +110,10 @@ public class Usuario {
         this.email = email;
     }
 
-    /** @return a lista de matérias associadas ao usuário */
-    public List<Materia> getMaterias() {
-        return this.materias;
+    public List<Inscricao> getInscricoes() {
+        return this.inscricoes;
     }
+
 
     /** @return a lista de itens agendados pelo usuário */
     public List<ItemAgendavel> getItensAgendados() {
@@ -198,31 +186,6 @@ public class Usuario {
     }
 
     /**
-     * Adiciona uma matéria ao usuário.
-     *
-     * @param materia matéria a adicionar
-     * @throws OperationInvalidException se a matéria já estiver cadastrada
-     */
-    public void adicionarMateria(Materia materia) {
-        if (this.materias.contains(materia)) {
-            throw new OperationInvalidException("Item já está agendado.");
-        }
-        this.materias.add(materia);
-    }
-
-    /**
-     * Remove uma matéria do usuário.
-     *
-     * @param materia matéria a remover
-     * @throws OperationInvalidException se a matéria não estiver na lista
-     */
-    public void removerMateria(Materia materia) {
-        if (!this.materias.remove(materia)) {
-            throw new OperationInvalidException("Matéria não encontrada para remoção.");
-        }
-    }
-
-    /**
      * Cria uma atividade em uma matéria do usuário e adiciona o evento
      * correspondente.
      *
@@ -235,7 +198,7 @@ public class Usuario {
      */
     public void criarAtividade(String nomeMateria, String nomeAtividade, double peso, String conteudo, String data,
             String horaInicio) {
-        for (Materia m : this.materias) {
+        for (Materia m : this.getMaterias()) {
             if (m.getNome().equalsIgnoreCase(nomeMateria)) {
                 String dataHoraInicio = data + " " + horaInicio;
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -273,6 +236,12 @@ public class Usuario {
                 System.out.println("Detalhes: " + e.getDetalhes());
             }
         }
+    }
+
+    public List<Materia> getMaterias() {
+        return inscricoes.stream()
+                .map(Inscricao::getMateria)
+                .toList();
     }
 
     /** @return representação textual do usuário */
