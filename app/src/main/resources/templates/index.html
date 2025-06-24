@@ -329,7 +329,18 @@
                     }
                 } catch (error) { console.error(error); }
             } else if (removeBtn) {
-                // ... (código de remover matéria permanece o mesmo)
+                const codigo = removeBtn.dataset.id;
+                try {
+                    const response = await fetch(`/api/removerMateriaUsuario?codigo=${codigo}`, { method: 'POST' });
+                    if (response.ok) {
+                        userSubjects = userSubjects.filter(s => s.codigo !== codigo);
+                        renderSubjects();
+                        showSubjectMessage('Matéria removida com sucesso!');
+                    } else {
+                        const errorText = await response.text();
+                        showSubjectMessage(`Erro: ${errorText}`, true);
+                    }
+                } catch (error) { showSubjectMessage('Erro de rede. Tente novamente.', true); }
             }
         }
         

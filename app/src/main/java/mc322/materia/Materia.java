@@ -6,6 +6,9 @@ package mc322.materia;
 
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
 import jakarta.persistence.Entity;
@@ -109,6 +112,7 @@ public class Materia {
      * 
      * @return limite máximo de faltas.
      */
+    @JsonProperty("limiteFaltas")
     public int getLimiteFaltas() {
         return 2 * this.creditos - 1;
     }
