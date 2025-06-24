@@ -270,7 +270,7 @@
             userSubjects.forEach(subject => {
                 const faltas = typeof subject.faltas === 'number' ? subject.faltas : 0;
                 const limiteFaltas = typeof subject.limiteFaltas === 'number' ? subject.limiteFaltas : 0;
-                const absencePercentage = limiteFaltas > 0 ? (faltas / limiteFaltas) * 100 : 0;
+                const absencePercentage = limiteFaltas > 0 ? Math.min((faltas / limiteFaltas),1) * 100 : 0;
                 let progressBarColor = 'bg-green-500';
                 if (absencePercentage > 50) progressBarColor = 'bg-yellow-500';
                 if (absencePercentage >= 80) progressBarColor = 'bg-red-500';
@@ -429,6 +429,7 @@
             document.getElementById('backButton').addEventListener('click', () => { nav--; loadCalendar(); });
             document.getElementById('addEventBtn').addEventListener('click', () => openModal(new Date().toISOString().slice(0, 10)));
             document.getElementById('cancelButton').addEventListener('click', closeModal);
+            deleteButton.addEventListener('click', deleteEventFromModal);
             document.getElementById('eventForm').addEventListener('submit', saveEvent);
             document.getElementById('menuBtn').addEventListener('click', () => toggleSideMenu(true));
             document.getElementById('closeMenuBtn').addEventListener('click', () => toggleSideMenu(false));
@@ -436,6 +437,27 @@
             addSubjectForm.addEventListener('submit', handleAddSubject);
             subjectList.addEventListener('click', handleSubjectListClick);
         }
+
+        async function deleteEventFromModal() {
+            const eventId = eventIdInput.value;
+            if (!eventId) return;
+
+            try {
+                const response = await fetch(`/api/events/delete/${eventId}`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    closeModal(); // Fecha o modal e recarrega o calendário
+                } else {
+                    alert('Falha ao excluir o evento.');
+                }
+            } catch (error) {
+                console.error('Erro de rede ao excluir evento:', error);
+                alert('Erro de conexão ao excluir evento.');
+            }
+        }
+        
 
         // --- INICIALIZAÇÃO DA PÁGINA ---
         await loadUserSubjects();

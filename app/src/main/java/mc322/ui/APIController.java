@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -273,4 +274,33 @@ public class APIController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @PostMapping("/api/events/delete/{id}")
+public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+    try {
+        // Pega o usuário logado
+        Usuario usuarioAtual = usuarioRepository.findById(Usuario.getInstance().getId()).orElse(null);
+        if (usuarioAtual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Verifica se o evento a ser excluído pertence a este usuário
+        boolean foiRemovido = usuarioAtual.getItensAgendados()
+                .removeIf(evento -> evento.getId().equals(id));
+
+        if (foiRemovido) {
+            // Salva o estado do usuário (com o item removido da lista),
+            // o que, devido à configuração 'orphanRemoval=true', deletará o evento do banco.
+            usuarioRepository.save(usuarioAtual);
+            System.out.println("Evento com ID " + id + " foi removido para o usuário " + usuarioAtual.getEmail());
+            return ResponseEntity.ok().body("Evento removido com sucesso.");
+        } else {
+            // Se não foi removido, é porque não foi encontrado na lista do usuário
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento não encontrado ou não pertence ao usuário.");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 }
