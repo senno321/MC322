@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Estudante</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS consolidado para evitar problemas com arquivos externos */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        #sideMenu {
+            transition: transform 0.3s ease-in-out;
+        }
+        .menu-open {
+            transform: translateX(0);
+        }
+        .menu-closed {
+            transform: translateX(-100%);
+        }
+        .btn-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .day {
+            transition: background-color 0.2s;
+        }
+        .day:hover {
+            background-color: #e9ecef;
+        }
+        .event {
+            font-size: 0.7rem;
+            padding: 2px 4px;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div id="app" class="relative min-h-screen">
+
+        <aside id="sideMenu" class="fixed top-0 left-0 h-full w-80 bg-white shadow-lg p-6 z-30 menu-closed flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Matérias</h2>
+                <button id="closeMenuBtn" class="text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="addSubjectForm" class="mb-4">
+                <label for="subjectCodeInput" class="text-sm font-medium text-gray-700">Adicionar Matéria</label>
+                <div class="flex gap-2 mt-1">
+                    <input type="text" id="subjectCodeInput" placeholder="Ex: MC102" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 uppercase">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"><i class="fas fa-plus"></i></button>
+                </div>
+                <p id="subjectMessage" class="text-xs mt-1 h-4"></p>
+            </form>
+
+            <div id="subjectList" class="space-y-4 flex-grow overflow-y-auto">
+                </div>
+        </aside>
+        <div id="menuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"></div>
+
+        <main id="mainContent" class="p-4 sm:p-6 lg:p-8 transition-transform duration-300">
+            <header class="flex justify-between items-center mb-6">
+                <button id="menuBtn" class="text-xl lg:text-2xl font-bold text-gray-700 p-2 rounded-full hover:bg-gray-200">
+                     <i class="fas fa-bars"></i>
+                </button>
+                <div class="text-center">
+                    <h1 id="monthDisplay" class="text-2xl sm:text-3xl font-bold text-gray-800"></h1>
+                    <p class="text-gray-500">Clique em um dia para ver ou adicionar eventos</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="backButton" class="px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"><i class="fas fa-chevron-left"></i></button>
+                    <button id="nextButton" class="px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </header>
+
+            <div id="weekdays" class="grid grid-cols-7 gap-2 text-center font-semibold text-gray-600 mb-2">
+                <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+            </div>
+            <div id="calendar" class="grid grid-cols-7 gap-2">
+                </div>
+        </main>
+
+        <button id="addEventBtn" class="fixed bottom-8 right-8 bg-blue-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-3xl btn-hover">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <div id="newEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 hidden">
+            <div class="bg-white rounded-lg shadow-xl p-8 w-11/12 md:w-1/2 lg:w-1/3 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Novo Evento</h2>
+                <form id="eventForm" class="space-y-4">
+                    <input type="hidden" id="eventIdInput">
+                    
+                    <div>
+                        <label for="eventTitleSelect" class="text-sm font-medium text-gray-700">Tipo de Evento</label>
+                        <select id="eventTitleSelect" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 mt-1" required>
+                            <option value="Prova">Prova</option>
+                            <option value="Reunião">Reunião</option>
+                            <option value="Extensão">Extensão</option>
+                            <option value="Atividade">Atividade</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="eventNameInput" class="text-sm font-medium text-gray-700">Nome do Evento</label>
+                        <input type="text" id="eventNameInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 mt-1" required>
+                    </div>
+                    
+                    <input type="text" id="eventLocationInput" placeholder="Local" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+                    <input type="date" id="eventDateInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" required>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="time" id="eventStartTimeInput" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" required>
+                        <input type="number" id="eventDurationInput" placeholder="Duração (min)" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                         <button type="button" id="deleteButton" class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition hidden">Excluir</button>
+                        <div>
+                           <button type="button" id="cancelButton" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Cancelar</button>
+                           <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Salvar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src = "homeScript.js"></script>
+</body>
+</html>

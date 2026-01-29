@@ -16,6 +16,14 @@ group = 'com.exemplo'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/classes', 'src/main/db']
+        }
+    }
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -32,6 +40,10 @@ dependencies {
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation libs.guava
+    
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -43,7 +55,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'mc322.App'
+    mainClass = 'classes.App'
 }
 
 tasks.named('test') {
